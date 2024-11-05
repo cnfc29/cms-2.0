@@ -1,0 +1,43 @@
+.parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.container {
+  padding-top: 48px;
+  width: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+form {
+  width: 100%;
+}
+
+.text {
+  align-self: flex-start;
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 600;
+}
+
+.inputsList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media screen and (max-width: 555px) {
+  .container {
+    width: 90%;
+  }
+
+  .text {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}

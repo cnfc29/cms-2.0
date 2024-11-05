@@ -1,0 +1,42 @@
+* {
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+html,
+body {
+  height: 100%;
+
+  --purpleColor: #9449ea;
+  --whiteColor: #f2f5fc;
+}
+
+body.dark {
+  --backgroundColor: #1c1e23;
+  --allTextColor: #f2f5fc;
+
+  /* Input */
+  --inputBackgroundColor: #22252c;
+  --inputPlaceholderColor: #5a606e;
+}
+
+body.light {
+  --backgroundColor: none;
+  --allTextColor: #454c5e;
+
+  /* Input */
+  --inputBackgroundColor: #f0f3f9;
+  --inputPlaceholderColor: #b0b9cd;
+}
+
+#root {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--backgroundColor);
+  color: var(--allTextColor);
+}

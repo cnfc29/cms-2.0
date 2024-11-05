@@ -1,0 +1,20 @@
+input.input {
+  width: 100%;
+  height: 56px;
+  border-radius: 12px;
+  padding-left: 16px;
+  background-color: var(--inputBackgroundColor);
+  color: var(--allTextColor);
+  font-size: 16px;
+}
+
+input::placeholder {
+  color: var(--inputPlaceholderColor);
+}
+
+@media screen and (max-width: 555px) {
+  input.input {
+    font-size: 14px;
+    height: 44px;
+  }
+}

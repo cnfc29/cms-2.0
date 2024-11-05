@@ -1,0 +1,16 @@
+button.btn {
+  width: 150px;
+  height: 56px;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: var(--purpleColor);
+  color: var(--whiteColor);
+  margin-bottom: 30px;
+}
+
+@media screen and (max-width: 555px) {
+  button.btn {
+    width: 121px;
+    height: 44px;
+  }
+}
