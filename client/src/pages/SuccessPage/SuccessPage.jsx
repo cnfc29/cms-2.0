@@ -1,7 +1,9 @@
 import React from "react";
 import styles from "./SuccessPage.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function SuccessPage() {
+  const navigate = useNavigate();
   return (
     <div className={styles.parent}>
       <div className={styles.container}>
@@ -19,12 +21,19 @@ export default function SuccessPage() {
             />
           </svg>
         </div>
-        <div>Ваша заявка принята на рассмотрение</div>
-        <div>
-          Вы получите подтверждение об участии на мероприятии по электронной
-          почте, после того как ваша заявка пройдет модерацию
+        <div className={styles.textContainer}>
+          <div>
+            Ваша заявка принята
+            <br /> на рассмотрение
+          </div>
+          <div className={styles.text}>
+            Вы получите подтверждение об участии на мероприятии по электронной
+            почте, после того как ваша заявка пройдет модерацию
+          </div>
         </div>
-        <button>Вернуться назад</button>
+        <button className={styles.btn} onClick={() => navigate("/")}>
+          Вернуться назад
+        </button>
       </div>
     </div>
   );

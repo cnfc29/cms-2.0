@@ -12,26 +12,53 @@ html,
 body {
   height: 100%;
 
-  --purpleColor: #9449ea;
   --whiteColor: #f2f5fc;
 }
 
 body.dark {
   --backgroundColor: #1c1e23;
+  --purpleColor: #9449ea;
+
+  /* Text */
   --allTextColor: #f2f5fc;
+  --descriptionText: #838da7;
 
   /* Input */
   --inputBackgroundColor: #22252c;
   --inputPlaceholderColor: #5a606e;
+
+  /* NavLink */
+  --backgroundColorLink: #1f2128;
+  --backgroundColorTotalLink: #22252c;
+  --colorTotalLink: #3d424d;
+  --colorTotalLinkActive: #5a606e;
+
+  /* Cards */
+  --greenColor: #1f6252;
+  --redColor: #783323;
 }
 
 body.light {
   --backgroundColor: none;
+  --purpleColor: #a556ff;
+
+  /* Text */
   --allTextColor: #454c5e;
+  --descriptionText: #76809a;
 
   /* Input */
   --inputBackgroundColor: #f0f3f9;
   --inputPlaceholderColor: #b0b9cd;
+
+  /* NavLink */
+  --backgroundColorLink: #f8f9fd;
+  --backgroundColorTotalLink: #f0f3f9;
+  --colorTotalLink: #d3d8e2;
+  --colorTotalLinkActive: #b0b9cd;
+
+  /* Cards */
+  --greenColor: #66c9b2;
+  --redColor: #d28776;
 }
 
 #root {

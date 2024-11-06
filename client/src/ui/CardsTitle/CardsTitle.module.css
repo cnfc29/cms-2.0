@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.title {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.total {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 800;
+  padding: 0px 12px;
+  border-radius: 16px;
+  color: var(--whiteColor);
+}
+
+.all {
+  background-color: var(--purpleColor);
+}
+
+.approved {
+  background-color: var(--greenColor);
+}
+
+.rejected {
+  background-color: var(--redColor);
+}

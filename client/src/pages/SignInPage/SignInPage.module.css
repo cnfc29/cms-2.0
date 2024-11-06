@@ -1,0 +1,71 @@
+.parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.container {
+  width: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 600;
+}
+
+form.form {
+  width: 100%;
+}
+
+.inputsList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+input.input {
+  width: 100%;
+  height: 56px;
+  padding-left: 16px;
+  border-radius: 12px;
+  background-color: var(--inputBackgroundColor);
+  color: var(--allTextColor);
+  font-size: 16px;
+}
+
+input::placeholder {
+  color: var(--inputPlaceholderColor);
+}
+
+button.btn {
+  width: 95px;
+  height: 56px;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: var(--purpleColor);
+  color: var(--whiteColor);
+}
+
+@media screen and (max-width: 555px) {
+  .container {
+    width: 90%;
+  }
+
+  input.input {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .text {
+    font-size: 24px;
+  }
+
+  button.btn {
+    width: 74px;
+    height: 44px;
+    font-size: 14px;
+  }
+}

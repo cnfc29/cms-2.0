@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import styles from "./ApplicationsPage.module.css";
 import NavBar from "../../components/NavBar/NavBar";
 import ContentContainer from "../../ui/ContentContainer/ContentContainer";
 import { useApplications } from "../../HOCs/ApplicationsContext";
+import SearchInput from "../../ui/SearchInput/SearchInput";
+import CardsTitle from "../../ui/CardsTitle/CardsTitle";
 
 export default function ApplicationsPage() {
   const { applications, setSearchQuery, selectedType, loading } =
@@ -13,6 +16,11 @@ export default function ApplicationsPage() {
     setSearchQuery(e.target.value);
   };
 
+  const handleClearSearch = () => {
+    setLocalSearchQuery("");
+    setSearchQuery("");
+  };
+
   useEffect(() => {
     setLocalSearchQuery("");
   }, [selectedType]);
@@ -20,25 +28,41 @@ export default function ApplicationsPage() {
   return (
     <ContentContainer>
       <NavBar />
-      <input
-        type="search"
-        placeholder="Поиск заявок"
+      <SearchInput
         value={localSearchQuery}
         onChange={handleSearchChange}
+        onClear={handleClearSearch}
       />
-      {loading ? (
-        <div>Загрузка...</div>
-      ) : (
-        <ul>
-          {applications?.cards?.length === 0 && localSearchQuery ? (
-            <li>По вашему запросу ничего не найдено</li>
-          ) : applications?.cards?.length === 0 && !localSearchQuery ? (
-            <li>Список заявок пуст</li>
+      <div className={styles.applicationsContainer}>
+        {localSearchQuery ? (
+          <CardsTitle
+            type={selectedType}
+            search={true}
+            total={applications?.cards?.length}
+          />
+        ) : (
+          <CardsTitle type={selectedType} total={applications?.cards?.length} />
+        )}
+        <div className={styles.applicationsList}>
+          {loading ? (
+            <div>Загрузка...</div>
           ) : (
-            applications?.cards?.map((el) => <li key={el.id}>{el.name}</li>)
+            <>
+              {applications?.cards?.length === 0 && localSearchQuery ? (
+                <div>По вашему запросу ничего не найдено</div>
+              ) : applications?.cards?.length === 0 && !localSearchQuery ? (
+                <div>Список анкет пока пуст</div>
+              ) : (
+                applications?.cards?.map((el) => (
+                  <div className={styles.cardWrapper + " " + styles[selectedType]} key={el.id}>
+                    <div className={styles.cardContainer + " " + styles[selectedType]} onClick={() => window.open(el.link)}>{el.name}</div>
+                  </div>
+                ))
+              )}
+            </>
           )}
-        </ul>
-      )}
+        </div>
+      </div>
     </ContentContainer>
   );
 }

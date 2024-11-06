@@ -10,4 +10,39 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  align-items: center;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+  text-align: center;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.text {
+  width: 360px;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+  color: var(--descriptionText);
+}
+
+.btn {
+  width: 148px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: var(--purpleColor);
+  color: var(--whiteColor);
+  font-size: 14px;
+}
+
+@media screen and (max-width: 555px) {
+  .container {
+    font-size: 24px;
+    line-height: 32px;
+  }
 }

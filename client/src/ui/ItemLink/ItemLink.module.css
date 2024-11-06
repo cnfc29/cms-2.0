@@ -1,16 +1,9 @@
 .wrapper {
-  width: 104px;
-  height: 88px;
+  width: 132px;
+  height: 94px;
   border-radius: 16px;
   padding: 2px;
-}
-
-.active {
-  background-color: red;
-}
-
-.noActive {
-  background-color: var(--backgroundColor);
+  cursor: pointer;
 }
 
 .container {
@@ -18,28 +11,56 @@
   height: 100%;
   padding: 2px;
   border-radius: 14px;
-  background-color: var(--backgroundColor);
 }
 
 .content {
   width: 100%;
   height: 100%;
-  padding: 8px;
   display: flex;
-  gap: 4px;
   flex-direction: column;
-  justify-content: end;
   border-radius: 12px;
-  background-color: green;
+}
+
+.content.active {
+  background-color: var(--backgroundColorLink);
 }
 
 .total {
-  font-weight: 800;
-  font-size: 16px;
-  line-height: 16px;
+  width: 100%;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  background-color: var(--backgroundColorTotalLink);
+  color: var(--colorTotalLink);
+  border-radius: 12px;
+  font-size: 48px;
+  line-height: 48px;
+  overflow: hidden;
+  padding-bottom: 12px;
+  font-weight: 200;
+}
+
+.container:hover .total {
+  color: var(--colorTotalLinkActive);
+}
+
+.active .total {
+  color: var(--colorTotalLinkActive);
 }
 
 .text {
-  font-size: 12px;
-  line-height: 16px;
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+@media screen and (max-width: 455px) {
+  .text {
+    font-size: 12px;
+  }
 }

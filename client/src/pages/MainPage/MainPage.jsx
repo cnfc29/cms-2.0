@@ -14,15 +14,15 @@ export default function MainPage() {
     <div className={styles.parent}>
       <div className={styles.container}>
         <div className={styles.text}>Регистрация</div>
-        <form>
+        <form className={styles.form}>
           <div className={styles.inputsList}>
-            <Input placeholder="Фамилия" />
-            <Input placeholder="Имя" />
-            <Input placeholder="Отчество" />
-            <Input placeholder="Организация" />
-            <Input placeholder="Должность" />
-            <Input placeholder="Телефон" />
-            <Input placeholder="Почта" />
+            <Input type="text" placeholder="Фамилия" />
+            <Input type="text" placeholder="Имя" />
+            <Input type="text" placeholder="Отчество" />
+            <Input type="text" placeholder="Организация" />
+            <Input type="text" placeholder="Должность" />
+            <Input type="tel" placeholder="Телефон" />
+            <Input type="email" placeholder="Почта" />
             <DragAndDrop
               selectedFile={selectedFile}
               setSelectedFile={setSelectedFile}

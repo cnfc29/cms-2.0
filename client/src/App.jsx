@@ -8,10 +8,12 @@ import { ThemeProvider } from "./HOCs/ThemeContext";
 import "./App.css";
 import { ApplicationProvider } from "./HOCs/ApplicationsContext";
 import ThemeToggleButton from "./ui/ThemeToggleButton/ThemeToggleButton";
+import SignInPage from "./pages/SignInPage/SignInPage";
 
 const routes = [
   { path: ROUTER.main, element: <MainPage /> },
   { path: ROUTER.success, element: <SuccessPage /> },
+  { path: ROUTER.signIn, element: <SignInPage /> },
   {
     path: ROUTER.applications,
     element: (
