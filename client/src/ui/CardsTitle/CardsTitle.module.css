@@ -19,6 +19,7 @@
   color: var(--whiteColor);
 }
 
+.without,
 .all {
   background-color: var(--purpleColor);
 }

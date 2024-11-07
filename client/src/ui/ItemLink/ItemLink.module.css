@@ -1,5 +1,5 @@
 .wrapper {
-  width: 132px;
+  min-width: 132px;
   height: 94px;
   border-radius: 16px;
   padding: 2px;
@@ -59,7 +59,12 @@
   font-size: 14px;
 }
 
-@media screen and (max-width: 455px) {
+@media screen and (max-width: 570px) {
+  .wrapper {
+    min-width: 104px;
+    height: 88px;
+  }
+
   .text {
     font-size: 12px;
   }

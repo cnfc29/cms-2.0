@@ -5,12 +5,21 @@ import debounce from "lodash.debounce";
 
 const ApplicationsContext = createContext();
 
-const allowedTypes = ["all", "approved", "rejected"];
+const allowedTypes = ["all", "without", "approved", "rejected"];
+
+export const AllowedTypesMap = {
+  all: "all",
+  without: "without",
+  approved: "approved",
+  rejected: "rejected",
+};
 
 export const ApplicationProvider = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryType = searchParams.get("type");
-  const initialType = allowedTypes.includes(queryType) ? queryType : "all";
+  const initialType = allowedTypes.includes(queryType)
+    ? queryType
+    : AllowedTypesMap.all;
 
   const [selectedType, setSelectedType] = useState(initialType);
   const [applications, setApplications] = useState([]);
@@ -37,7 +46,12 @@ export const ApplicationProvider = ({ children }) => {
     setLoading(true);
     axios
       .get("/api/applications", {
-        params: { type: selectedType, search: searchQuery },
+        params: {
+          type: selectedType,
+          search: searchQuery,
+          page: 1,
+          limit: 1000,
+        },
       })
       .then((res) => setApplications(res.data))
       .catch((error) => console.error("Ошибка при получении данных:", error))

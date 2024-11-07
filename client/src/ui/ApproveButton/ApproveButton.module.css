@@ -1,0 +1,12 @@
+button.button {
+  width: 106px;
+  height: 40px;
+  font-size: 12px;
+  line-height: 16px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  background-color: var(--approveBackgroundButton);
+  color: var(--approveColorButton);
+  cursor: pointer;
+  margin-top: 16px;
+}

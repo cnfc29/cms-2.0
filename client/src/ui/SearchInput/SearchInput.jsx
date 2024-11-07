@@ -1,7 +1,37 @@
 import React from "react";
 import styles from "./SearchInput.module.css";
+import { AllowedTypesMap } from "../../HOCs/ApplicationsContext";
 
-export default function SearchInput({ value, onChange, onClear }) {
+const placeholderHelper = (type) => {
+  let placeholder;
+  switch (true) {
+    case type === AllowedTypesMap.all:
+      placeholder = "Поиск по всем анкетам";
+      break;
+    case type === AllowedTypesMap.without:
+      placeholder = "Поиск по заявкам";
+      break;
+    case type === AllowedTypesMap.approved:
+      placeholder = "Поиск по одобренным";
+      break;
+    case type === AllowedTypesMap.rejected:
+      placeholder = "Поиск по отклоненным";
+      break;
+
+    default:
+      break;
+  }
+
+  return placeholder;
+};
+
+export default function SearchInput({
+  value,
+  onChange,
+  onClear,
+  selectedType,
+}) {
+  const placeholder = placeholderHelper(selectedType);
   return (
     <div className={styles.container}>
       <div className={styles.searchContainer}>
@@ -22,11 +52,10 @@ export default function SearchInput({ value, onChange, onClear }) {
         </div>
         <input
           className={styles.input}
-          id="search"
           name="search"
-          type="search"
+          type="text"
           autoComplete="off"
-          placeholder="Поиск по заявкам"
+          placeholder={placeholder}
           value={value}
           onChange={onChange}
         />

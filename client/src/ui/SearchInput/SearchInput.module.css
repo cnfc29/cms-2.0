@@ -30,10 +30,6 @@ input.input::placeholder {
   color: var(--inputPlaceholderColor);
 }
 
-input[type="search"]::-webkit-search-cancel-button {
-  display: none;
-}
-
 button.iconClear {
   font-size: 24px;
   border-radius: 12px;

@@ -18,4 +18,19 @@
 .linksList {
   display: flex;
   gap: 8px;
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 570px) {
+  .linksList {
+    gap: 6px;
+  }
+
+  .container {
+    padding-right: 0px;
+  }
+
+  .settings {
+    padding-right: 12px;
+  }
 }

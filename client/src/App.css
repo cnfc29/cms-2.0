@@ -36,10 +36,17 @@ body.dark {
   /* Cards */
   --greenColor: #1f6252;
   --redColor: #783323;
+  --borderBottomCard: #303749;
+
+  /* Buttons */
+  --approveBackgroundButton: #203233;
+  --approveColorButton: #22cb49;
+  --rejectBackgroundButton: #3b2526;
+  --rejectColorButton: #b55449;
 }
 
 body.light {
-  --backgroundColor: none;
+  --backgroundColor: #ffffff;
   --purpleColor: #a556ff;
 
   /* Text */
@@ -59,6 +66,13 @@ body.light {
   /* Cards */
   --greenColor: #66c9b2;
   --redColor: #d28776;
+  --borderBottomCard: #d0d8ed;
+
+  /* Buttons */
+  --approveBackgroundButton: #c0d8d9;
+  --approveColorButton: #1ebb42;
+  --rejectBackgroundButton: #edd1d2;
+  --rejectColorButton: #fa918d;
 }
 
 #root {
