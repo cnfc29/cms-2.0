@@ -8,5 +8,4 @@ button.button {
   background-color: var(--approveBackgroundButton);
   color: var(--approveColorButton);
   cursor: pointer;
-  margin-top: 16px;
 }

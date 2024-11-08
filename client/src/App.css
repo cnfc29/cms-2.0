@@ -27,6 +27,11 @@ body.dark {
   --inputBackgroundColor: #22252c;
   --inputPlaceholderColor: #5a606e;
 
+  /* Options */
+  --backgroundOption: #1f2128;
+  --backgroundSelectedOrHoverOption: #262b38;
+  --colorOption: #838da7;
+
   /* NavLink */
   --backgroundColorLink: #1f2128;
   --backgroundColorTotalLink: #22252c;
@@ -56,6 +61,11 @@ body.light {
   /* Input */
   --inputBackgroundColor: #f0f3f9;
   --inputPlaceholderColor: #b0b9cd;
+
+  /* Options */
+  --backgroundOption: #f8f9fd;
+  --backgroundSelectedOrHoverOption: #e6eaf4;
+  --colorOption: #76809a;
 
   /* NavLink */
   --backgroundColorLink: #f8f9fd;

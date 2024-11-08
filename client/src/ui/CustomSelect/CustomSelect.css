@@ -1,0 +1,18 @@
+.customSelect__control {
+  height: 56px;
+}
+
+.customSelect__menu {
+  font-size: 14px;
+}
+
+.customSelect__option {
+  height: 36px;
+}
+
+@media (max-width: 555px) {
+  .customSelect__control {
+    font-size: 14px;
+    height: 44px;
+  }
+}

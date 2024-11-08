@@ -109,21 +109,48 @@ export default function ApplicationsPage() {
                             </div>
                           </div>
 
-                          {selectedType === AllowedTypesMap.without && (
-                            <div className={styles.buttons}>
-                              <ApproveButton />
-                              <RejectButton />
-                            </div>
-                          )}
+                          {selectedType === AllowedTypesMap.without &&
+                            card.status === null && (
+                              <div className={styles.buttons}>
+                                <ApproveButton />
+                                <RejectButton />
+                              </div>
+                            )}
 
                           {(selectedType === AllowedTypesMap.approved ||
                             selectedType === AllowedTypesMap.rejected) && (
                             <div className={styles.buttons}>
-                              {card.status === true
-                                ? "Одобрен"
-                                : card.status === false
-                                ? "Отклонен"
-                                : ""}
+                              {card.status === true ? (
+                                <div
+                                  style={{
+                                    padding: "4px 8px",
+                                    fontSize: "12px",
+                                    backgroundColor: "var(--greenColor)",
+                                    borderRadius: "16px",
+                                    color: "var(--whiteColor)",
+                                  }}
+                                >
+                                  Одобрен
+                                </div>
+                              ) : card.status === false ? (
+                                <div
+                                  style={{
+                                    padding: "4px 8px",
+                                    fontSize: "12px",
+                                    backgroundColor: "var(--redColor)",
+                                    borderRadius: "16px",
+                                    color: "var(--whiteColor)",
+                                  }}
+                                >
+                                  Отклонен
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                              {!card.qr &&
+                                selectedType !== AllowedTypesMap.rejected && (
+                                  <div>Присвоить QR</div>
+                                )}
                             </div>
                           )}
                         </div>
