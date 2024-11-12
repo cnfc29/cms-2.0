@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 import styles from "./MainPage.module.css";
 import Input from "../../ui/Input/Input";
 import DragAndDrop from "../../ui/DragAndDrop/DragAndDrop";
@@ -9,36 +11,100 @@ import CustomSelect from "../../ui/CustomSelect/CustomSelect";
 import axios from "axios";
 
 export default function MainPage() {
-  const { register, handleSubmit, control } = useForm();
   const [selectedFile, setSelectedFile] = useState(null);
+  const [selectData, setSelectData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-  const options = [
-    { value: "Очно", label: "Очно" },
-    { value: "Онлайн", label: "Онлайн" },
-  ];
+  const validationSchema = Yup.object().shape({
+    last_name: Yup.string().required("Заполните поле"),
+    first_name: Yup.string().required("Заполните поле"),
+    middle_name: Yup.string().required("Заполните поле"),
+    organization: Yup.string().required("Заполните поле"),
+    post: Yup.string().required("Заполните поле"),
+    phone: Yup.string().required("Заполните поле"),
+    email: Yup.string()
+      .email("Введите корректный email")
+      .required("Заполните поле"),
+    participation_format: Yup.object().required("Заполните поле").nullable(),
+    field_of_activity: Yup.object().required("Заполните поле").nullable(),
+    your_expertise: Yup.object().required("Заполните поле").nullable(),
+    participation_in_the_cic: Yup.object()
+      .required("Заполните поле")
+      .nullable(),
+    participant_status: Yup.object().required("Заполните поле").nullable(),
+    photo: Yup.mixed().required("Пожалуйста, загрузите файл"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+    clearErrors,
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      photo: null,
+    },
+  });
+
+  const getData = async () => {
+    try {
+      const endpoints = [
+        {
+          key: "participationFormat",
+          url: `${baseURL}/getListParticipationFormat`,
+        },
+        { key: "fieldOfActivity", url: `${baseURL}/getListFieldOfActivity` },
+        { key: "listYourExpertise", url: `${baseURL}/getListYourExpertise` },
+        {
+          key: "listParticipationInTheCIC",
+          url: `${baseURL}/getListParticipationInTheCIC`,
+        },
+        {
+          key: "listParticipantStatus",
+          url: `${baseURL}/getListParticipantStatus`,
+        },
+      ];
+
+      const responses = await Promise.all(
+        endpoints.map((endpoint) => axios.get(endpoint.url))
+      );
+      const data = responses.reduce((acc, res, index) => {
+        acc[endpoints[index].key] = res.data;
+        return acc;
+      }, {});
+
+      setSelectData(data);
+      setLoading(false);
+    } catch (error) {
+      setError(true);
+      console.error("Ошибка при получении данных, попробуйте позже ...", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const submitHandler = async (data) => {
     const formData = new FormData();
-
     for (let key in data) {
-      if (key === "participationFormat") {
-        formData.append(key, data[key].value);
-      } else {
-        formData.append(key, data[key]);
-      }
-    }
-
-    if (selectedFile) {
-      formData.append("image", selectedFile);
+      const fieldValue = data[key];
+      formData.append(key, fieldValue?.value || fieldValue);
     }
 
     try {
-      const res = await axios.post("/api/data", formData);
-
-      console.log(formData);
-
-      if (res.status === 201) {
+      const res = await axios.post(`${baseURL}/add`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      if (res.data.result === true) {
         navigate("/success");
       }
     } catch (error) {
@@ -46,43 +112,158 @@ export default function MainPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className={styles.parent}>
+        <div>Загрузка...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.parent}>
+        <div>Произошла ошибка, повторите позже</div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.parent}>
       <div className={styles.container}>
         <div className={styles.text}>Регистрация</div>
         <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
           <div className={styles.inputsList}>
-            <Input type="text" placeholder="Фамилия" {...register("surname")} />
-            <Input type="text" placeholder="Имя" {...register("name")} />
+            <Input
+              type="text"
+              placeholder="Фамилия"
+              {...register("last_name")}
+              error={errors.last_name}
+            />
+            <Input
+              type="text"
+              placeholder="Имя"
+              {...register("first_name")}
+              error={errors.first_name}
+            />
             <Input
               type="text"
               placeholder="Отчество"
-              {...register("patronymic")}
+              {...register("middle_name")}
+              error={errors.middle_name}
             />
             <Input
               type="text"
               placeholder="Организация"
-              {...register("company")}
+              {...register("organization")}
+              error={errors.organization}
             />
             <Input
               type="text"
               placeholder="Должность"
-              {...register("position")}
+              {...register("post")}
+              error={errors.post}
             />
-            <Input type="tel" placeholder="Телефон" {...register("phone")} />
-            <Input type="email" placeholder="Почта" {...register("email")} />
+            <Input
+              type="tel"
+              placeholder="Телефон"
+              {...register("phone")}
+              error={errors.phone}
+            />
+            <Input
+              type="text"
+              placeholder="Почта"
+              {...register("email")}
+              error={errors.email}
+            />
             <DragAndDrop
               selectedFile={selectedFile}
-              setSelectedFile={setSelectedFile}
+              setSelectedFile={(file) => {
+                setSelectedFile(file);
+                setValue("photo", file);
+                clearErrors("photo");
+              }}
+              error={errors.photo?.message}
             />
+
             <Controller
-              name="participationFormat"
+              name="participation_format"
               control={control}
               render={({ field }) => (
                 <CustomSelect
                   {...field}
-                  options={options}
-                  placeholder="Формат участия"
+                  options={selectData.participationFormat?.options || []}
+                  placeholder={
+                    selectData.participationFormat?.placeholder || "Выберите..."
+                  }
+                  isSearchable={false}
+                  error={errors.participation_format}
+                />
+              )}
+            />
+
+            <Controller
+              name="field_of_activity"
+              control={control}
+              render={({ field }) => (
+                <CustomSelect
+                  {...field}
+                  options={selectData.fieldOfActivity?.options || []}
+                  placeholder={
+                    selectData.fieldOfActivity?.placeholder || "Выберите..."
+                  }
+                  isSearchable={false}
+                  error={errors.field_of_activity}
+                />
+              )}
+            />
+
+            <Controller
+              name="your_expertise"
+              control={control}
+              render={({ field }) => (
+                <CustomSelect
+                  {...field}
+                  options={selectData.listYourExpertise?.options || []}
+                  placeholder={
+                    selectData.listYourExpertise?.placeholder || "Выберите..."
+                  }
+                  isSearchable={false}
+                  error={errors.your_expertise}
+                />
+              )}
+            />
+
+            <Controller
+              name="participation_in_the_cic"
+              control={control}
+              render={({ field }) => (
+                <CustomSelect
+                  {...field}
+                  options={selectData.listParticipationInTheCIC?.options || []}
+                  placeholder={
+                    selectData.listParticipationInTheCIC?.placeholder ||
+                    "Выберите..."
+                  }
+                  isSearchable={false}
+                  error={errors.participation_in_the_cic}
+                />
+              )}
+            />
+
+            <Controller
+              name="participant_status"
+              control={control}
+              render={({ field }) => (
+                <CustomSelect
+                  {...field}
+                  options={selectData.listParticipantStatus?.options || []}
+                  placeholder={
+                    selectData.listParticipantStatus?.placeholder ||
+                    "Выберите..."
+                  }
+                  isSearchable={false}
+                  error={errors.participant_status}
                 />
               )}
             />

@@ -5,7 +5,7 @@ button.btn {
   font-size: 16px;
   background-color: var(--purpleColor);
   color: var(--whiteColor);
-  margin-bottom: 30px;
+  margin-bottom: 80px;
 }
 
 @media screen and (max-width: 555px) {

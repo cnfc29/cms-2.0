@@ -1,0 +1,10 @@
+button.button {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  padding: 4px 12px;
+  border-radius: 16px;
+  color: var(--descriptionText);
+  background-color: var(--backgroundSelectedOrHoverOption);
+  cursor: pointer;
+}

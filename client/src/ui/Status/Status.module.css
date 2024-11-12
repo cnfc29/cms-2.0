@@ -1,0 +1,17 @@
+.container {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 16px;
+}
+
+.approved {
+  background-color: var(--greenColor);
+  color: var(--approveStatusColor);
+}
+
+.rejected {
+  background-color: var(--redColor);
+  color: var(--rejectStatusColor);
+}

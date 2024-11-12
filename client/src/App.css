@@ -48,6 +48,13 @@ body.dark {
   --approveColorButton: #22cb49;
   --rejectBackgroundButton: #3b2526;
   --rejectColorButton: #b55449;
+
+  /* ERROR */
+  --errorColor: #b55449;
+
+  /* Status */
+  --approveStatusColor: #9eebcf;
+  --rejectStatusColor: #ebc6ba;
 }
 
 body.light {
@@ -83,6 +90,13 @@ body.light {
   --approveColorButton: #1ebb42;
   --rejectBackgroundButton: #edd1d2;
   --rejectColorButton: #fa918d;
+
+  /* ERROR */
+  --errorColor: #fa918d;
+
+  /* Status */
+  --approveStatusColor: #e8f9f3;
+  --rejectStatusColor: #f8eeeb;
 }
 
 #root {

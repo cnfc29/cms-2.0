@@ -3,15 +3,17 @@ import Select from "react-select";
 import "./CustomSelect.css";
 
 const CustomSelect = forwardRef(
-  ({ options, placeholder, onChange, value }, ref) => {
+  ({ options, placeholder, onChange, value, isSearchable, error }, ref) => {
     const customStyles = {
       control: (provided) => ({
         ...provided,
-        border: "none",
+        border: error ? `1px solid var(--errorColor)` : "none",
         boxShadow: "none",
+        outline: "none",
         backgroundColor: "var(--inputBackgroundColor)",
         borderRadius: "12px",
         paddingLeft: "6px",
+        transition: "0ms",
       }),
       menu: (provided) => ({
         ...provided,
@@ -58,15 +60,19 @@ const CustomSelect = forwardRef(
     };
 
     return (
-      <Select
-        ref={ref}
-        options={options}
-        styles={customStyles}
-        placeholder={placeholder}
-        onChange={onChange}
-        value={value}
-        classNamePrefix="customSelect"
-      />
+      <div className="selectContainer">
+        <Select
+          ref={ref}
+          options={options}
+          styles={customStyles}
+          placeholder={placeholder}
+          onChange={onChange}
+          value={value}
+          classNamePrefix="customSelect"
+          isSearchable={isSearchable}
+        />
+        {error && <span className="errorText">{error.message}</span>}
+      </div>
     );
   }
 );

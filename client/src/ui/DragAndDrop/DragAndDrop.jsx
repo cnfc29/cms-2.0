@@ -1,8 +1,9 @@
+// DragAndDrop.js
 import React from "react";
-import styles from "./DragAndDrop.module.css";
 import { useDropzone } from "react-dropzone";
+import styles from "./DragAndDrop.module.css";
 
-export default function DragAndDrop({ selectedFile, setSelectedFile }) {
+export default function DragAndDrop({ selectedFile, setSelectedFile, error }) {
   const onDrop = (acceptedFiles) => {
     setSelectedFile(acceptedFiles[0]);
   };
@@ -19,6 +20,7 @@ export default function DragAndDrop({ selectedFile, setSelectedFile }) {
     e.stopPropagation();
     setSelectedFile(null);
   };
+
   return (
     <div className={styles.dragAndDropZone}>
       <div {...getRootProps({ className: styles.dragAndDrop })}>
@@ -57,6 +59,7 @@ export default function DragAndDrop({ selectedFile, setSelectedFile }) {
           </div>
         </div>
       )}
+      {error && <span className={styles.errorText}>{error}</span>}
     </div>
   );
 }

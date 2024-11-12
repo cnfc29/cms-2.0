@@ -53,8 +53,17 @@ img.previewImage {
   padding-right: 10px;
 }
 
+.errorText {
+  color: var(--errorColor);
+  font-size: 14px;
+}
+
 @media screen and (max-width: 555px) {
   .selectedFileContainer {
     height: 44px;
+  }
+
+  .errorText {
+    font-size: 12px;
   }
 }
