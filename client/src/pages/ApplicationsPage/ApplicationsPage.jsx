@@ -92,7 +92,7 @@ export default function ApplicationsPage() {
         />
         {selectedType === AllowedTypesMap.approved && <ApprovedFilter />}
         <div className={styles.applicationsList}>
-          {loading ? (
+          {loading || applications.cards === null ? (
             <div>Загрузка...</div>
           ) : (
             <>

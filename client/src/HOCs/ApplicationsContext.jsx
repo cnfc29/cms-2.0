@@ -22,7 +22,7 @@ export const ApplicationProvider = ({ children }) => {
     : AllowedTypesMap.all;
 
   const [selectedType, setSelectedType] = useState(initialType);
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [forceUpdate, setForceUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -36,7 +36,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const resetSearchQuery = () => {
     setSearchQuery("");
-    setApplications((prev) => ({ ...prev, cards: [] }));
+    setApplications((prev) => ({ ...prev, cards: null }));
   };
 
   const approveHandler = async (id) => {
