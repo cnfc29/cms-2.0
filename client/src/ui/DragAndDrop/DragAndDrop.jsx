@@ -21,6 +21,18 @@ export default function DragAndDrop({ selectedFile, setSelectedFile, error }) {
     setSelectedFile(null);
   };
 
+  const getTruncatedFileName = (fileName) => {
+    const maxLength = 20;
+    const extension = fileName.slice(fileName.lastIndexOf("."));
+    const nameWithoutExtension = fileName.slice(0, fileName.lastIndexOf("."));
+
+    if (nameWithoutExtension.length > maxLength) {
+      return `${nameWithoutExtension.slice(0, maxLength)}... ${extension}`;
+    }
+
+    return fileName;
+  };
+
   return (
     <div className={styles.dragAndDropZone}>
       <div {...getRootProps({ className: styles.dragAndDrop })}>
@@ -40,7 +52,9 @@ export default function DragAndDrop({ selectedFile, setSelectedFile, error }) {
             alt="preview"
             className={styles.previewImage}
           />
-          <div className={styles.fileName}>{selectedFile.name}</div>
+          <div className={styles.fileName}>
+            {getTruncatedFileName(selectedFile.name)}
+          </div>
           <div className={styles.removeFileIcon} onClick={removeFile}>
             <svg
               width="20"

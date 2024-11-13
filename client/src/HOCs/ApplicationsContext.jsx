@@ -26,6 +26,7 @@ export const ApplicationProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [forceUpdate, setForceUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState({});
 
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -191,13 +192,13 @@ export const ApplicationProvider = ({ children }) => {
           search: searchQuery,
           page: 1,
           limit: 1000,
-          filter: "",
+          filter: filter,
         },
       })
       .then((res) => setApplications(res.data))
       .catch((error) => console.error("Ошибка при получении данных:", error))
       .finally(() => setLoading(false));
-  }, [selectedType, searchQuery, forceUpdate]);
+  }, [selectedType, searchQuery, forceUpdate, filter]);
 
   return (
     <ApplicationsContext.Provider
@@ -208,6 +209,7 @@ export const ApplicationProvider = ({ children }) => {
             setSelectedType(type);
             setForceUpdate(false);
             resetSearchQuery();
+            setFilter({});
           } else {
             setForceUpdate(true);
           }
@@ -222,6 +224,7 @@ export const ApplicationProvider = ({ children }) => {
         assignQRCode,
         setVIP,
         deleteVIP,
+        setFilter,
       }}
     >
       {children}

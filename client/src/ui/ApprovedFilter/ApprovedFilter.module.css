@@ -1,0 +1,19 @@
+.container {
+  padding-left: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+button.btn {
+  font-size: 14px;
+  line-height: 20px;
+  border-radius: 16px;
+  background-color: var(--backgroundSelectedOrHoverOption);
+  color: var(--descriptionText);
+  padding: 4px 12px;
+}
+
+button.btn.active {
+  background-color: var(--purpleColor);
+  color: var(--whiteColor);
+}

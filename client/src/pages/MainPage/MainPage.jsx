@@ -8,6 +8,7 @@ import DragAndDrop from "../../ui/DragAndDrop/DragAndDrop";
 import RegistrationButton from "../../ui/RegistrationButton/RegistrationButton";
 import { useNavigate } from "react-router-dom";
 import CustomSelect from "../../ui/CustomSelect/CustomSelect";
+import MaskedInputComponent from "../../ui/MaskedInputComponent/MaskedInputComponent";
 import axios from "axios";
 
 export default function MainPage() {
@@ -15,6 +16,8 @@ export default function MainPage() {
   const [selectData, setSelectData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -24,7 +27,12 @@ export default function MainPage() {
     middle_name: Yup.string().required("Заполните поле"),
     organization: Yup.string().required("Заполните поле"),
     post: Yup.string().required("Заполните поле"),
-    phone: Yup.string().required("Заполните поле"),
+    phone: Yup.string()
+      .required("Заполните поле")
+      .matches(
+        /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+        "Введите полный номер телефона"
+      ),
     email: Yup.string()
       .email("Введите корректный email")
       .required("Заполните поле"),
@@ -45,6 +53,7 @@ export default function MainPage() {
     setValue,
     formState: { errors },
     clearErrors,
+    reset,
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -94,6 +103,8 @@ export default function MainPage() {
   }, []);
 
   const submitHandler = async (data) => {
+    setIsSubmitting(true);
+    setErrorMessage("");
     const formData = new FormData();
     for (let key in data) {
       const fieldValue = data[key];
@@ -106,9 +117,15 @@ export default function MainPage() {
       });
       if (res.data.result === true) {
         navigate("/success");
+      } else {
+        setErrorMessage("Такой номер или почта уже зарегистрированы");
       }
     } catch (error) {
-      console.error("Ошибка при отправке данных:", error);
+      setErrorMessage("Ошибка при отправке данных. Повторите попытку позже.");
+      reset();
+      setSelectedFile(null);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -124,6 +141,14 @@ export default function MainPage() {
     return (
       <div className={styles.parent}>
         <div>Произошла ошибка, повторите позже</div>
+      </div>
+    );
+  }
+
+  if (isSubmitting) {
+    return (
+      <div className={styles.parent}>
+        <div>Отправка данных...</div>
       </div>
     );
   }
@@ -164,11 +189,16 @@ export default function MainPage() {
               {...register("post")}
               error={errors.post}
             />
-            <Input
-              type="tel"
-              placeholder="Телефон"
-              {...register("phone")}
-              error={errors.phone}
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field }) => (
+                <MaskedInputComponent
+                  {...field}
+                  placeholder="Телефон"
+                  error={errors.phone}
+                />
+              )}
             />
             <Input
               type="text"
@@ -267,7 +297,9 @@ export default function MainPage() {
                 />
               )}
             />
-
+            {errorMessage && (
+              <div className={styles.errorText}>{errorMessage}</div>
+            )}
             <RegistrationButton />
           </div>
         </form>

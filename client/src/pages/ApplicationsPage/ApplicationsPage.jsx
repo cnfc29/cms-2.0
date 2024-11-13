@@ -19,6 +19,7 @@ import RejectButtonMenu from "../../ui/RejectButtonMenu/RejectButtonMenu";
 import SetVIPButton from "../../ui/SetVIPButton/SetVIPButton";
 import DeleteVIPButton from "../../ui/DeleteVIPButton/DeleteVIPButton";
 import ApproveButtonMenu from "../../ui/ApproveButtonMenu/ApproveButtonMenu";
+import ApprovedFilter from "../../ui/ApprovedFilter/ApprovedFilter";
 
 export default function ApplicationsPage() {
   const [activeDropdownId, setActiveDropdownId] = useState(null);
@@ -89,6 +90,7 @@ export default function ApplicationsPage() {
           search={!!localSearchQuery}
           total={applications?.cards?.length}
         />
+        {selectedType === AllowedTypesMap.approved && <ApprovedFilter />}
         <div className={styles.applicationsList}>
           {loading ? (
             <div>Загрузка...</div>
@@ -128,54 +130,56 @@ export default function ApplicationsPage() {
                                 </button>
                               )}
 
-                            {activeDropdownId === card.id && (
-                              <div
-                                className={styles.popoverContent}
-                                ref={(el) =>
-                                  (dropdownRefs.current[card.id] = el)
-                                }
-                              >
-                                {selectedType === AllowedTypesMap.approved &&
-                                  card.status === "approved" && (
-                                    <RejectButtonMenu
-                                      onClick={() => {
-                                        rejectHandlerMenu(card.id);
-                                        setActiveDropdownId(null);
-                                      }}
-                                    />
-                                  )}
-
-                                {selectedType === AllowedTypesMap.rejected &&
-                                  card.status === "rejected" && (
-                                    <ApproveButtonMenu
-                                      onClick={() => {
-                                        approveHandlerMenu(card.id);
-                                        setActiveDropdownId(null);
-                                      }}
-                                    />
-                                  )}
-
-                                {selectedType === AllowedTypesMap.approved && (
-                                  <>
-                                    {card.vip === 0 ? (
-                                      <SetVIPButton
+                            {activeDropdownId === card.id &&
+                              selectedType !== AllowedTypesMap.all && (
+                                <div
+                                  className={styles.popoverContent}
+                                  ref={(el) =>
+                                    (dropdownRefs.current[card.id] = el)
+                                  }
+                                >
+                                  {selectedType === AllowedTypesMap.approved &&
+                                    card.status === "approved" && (
+                                      <RejectButtonMenu
                                         onClick={() => {
-                                          setVIP(card.id);
-                                          setActiveDropdownId(null);
-                                        }}
-                                      />
-                                    ) : (
-                                      <DeleteVIPButton
-                                        onClick={() => {
-                                          deleteVIP(card.id);
+                                          rejectHandlerMenu(card.id);
                                           setActiveDropdownId(null);
                                         }}
                                       />
                                     )}
-                                  </>
-                                )}
-                              </div>
-                            )}
+
+                                  {selectedType === AllowedTypesMap.rejected &&
+                                    card.status === "rejected" && (
+                                      <ApproveButtonMenu
+                                        onClick={() => {
+                                          approveHandlerMenu(card.id);
+                                          setActiveDropdownId(null);
+                                        }}
+                                      />
+                                    )}
+
+                                  {selectedType ===
+                                    AllowedTypesMap.approved && (
+                                    <>
+                                      {card.vip === 0 ? (
+                                        <SetVIPButton
+                                          onClick={() => {
+                                            setVIP(card.id);
+                                            setActiveDropdownId(null);
+                                          }}
+                                        />
+                                      ) : (
+                                        <DeleteVIPButton
+                                          onClick={() => {
+                                            deleteVIP(card.id);
+                                            setActiveDropdownId(null);
+                                          }}
+                                        />
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              )}
 
                             {card.vip === 1 &&
                               selectedType === AllowedTypesMap.approved && (

@@ -49,6 +49,16 @@ button.btn {
   color: var(--whiteColor);
 }
 
+.error {
+  color: var(--errorColor);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.inputError {
+  border: 1px solid var(--errorColor);
+}
+
 @media screen and (max-width: 555px) {
   .container {
     width: 90%;
@@ -67,5 +77,10 @@ button.btn {
     width: 74px;
     height: 44px;
     font-size: 14px;
+  }
+
+  .error {
+    font-size: 12px;
+    line-height: 16px;
   }
 }

@@ -3,14 +3,19 @@ button.btn {
   height: 56px;
   border-radius: 12px;
   font-size: 16px;
+  line-height: 24px;
   background-color: var(--purpleColor);
   color: var(--whiteColor);
   margin-bottom: 80px;
+  cursor: pointer;
+  font-weight: 400;
 }
 
 @media screen and (max-width: 555px) {
   button.btn {
     width: 121px;
     height: 44px;
+    font-size: 14px;
+    line-height: 20px;
   }
 }

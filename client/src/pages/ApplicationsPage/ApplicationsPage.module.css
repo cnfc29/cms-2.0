@@ -123,6 +123,7 @@ button.informationButton {
   line-height: 16px;
   color: var(--descriptionText);
   flex-grow: 1;
+  gap: 25px;
 }
 
 .userCompany,
@@ -133,6 +134,11 @@ button.informationButton {
   flex-direction: column;
   gap: 2px;
   flex: 1;
+}
+
+.userCompany,
+.userContacts {
+  max-width: 150px;
 }
 
 .buttons {
@@ -149,7 +155,7 @@ button.informationButton {
   gap: 16px;
 }
 
-@media screen and (max-width: 870px) {
+@media screen and (max-width: 850px) {
   .infoContainer {
     flex-direction: column;
     gap: 10px;
@@ -158,6 +164,12 @@ button.informationButton {
   .buttons {
     align-self: flex-start;
     margin-left: 0;
+  }
+
+  .userCompany,
+  .userContacts,
+  .userInfo {
+    max-width: 100%;
   }
 }
 
