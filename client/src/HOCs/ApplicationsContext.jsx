@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import debounce from "lodash.debounce";
 
@@ -16,10 +16,16 @@ export const AllowedTypesMap = {
 
 export const ApplicationProvider = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const queryType = searchParams.get("type");
-  const initialType = allowedTypes.includes(queryType)
-    ? queryType
-    : AllowedTypesMap.all;
+
+  const initialType =
+    location.pathname === "/applications" && allowedTypes.includes(queryType)
+      ? queryType
+      : location.pathname === "/applications"
+      ? AllowedTypesMap.all
+      : null;
 
   const [selectedType, setSelectedType] = useState(initialType);
   const [applications, setApplications] = useState({});
@@ -41,7 +47,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const approveHandler = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/approved`, {
+      const res = await axios.post(`${baseURL}/application/approved`, {
         id: +id,
         status: 1,
       });
@@ -61,7 +67,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const approveHandlerMenu = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/approved`, {
+      const res = await axios.post(`${baseURL}/application/approved`, {
         id: +id,
         status: 1,
       });
@@ -81,7 +87,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const rejectHandler = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/approved`, {
+      const res = await axios.post(`${baseURL}/application/approved`, {
         id: +id,
         status: 0,
       });
@@ -101,7 +107,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const rejectHandlerMenu = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/approved`, {
+      const res = await axios.post(`${baseURL}/application/approved`, {
         id: +id,
         status: 0,
       });
@@ -121,7 +127,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const setVIP = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/vip`, {
+      const res = await axios.post(`${baseURL}/application/vip`, {
         id: +id,
         status: 1,
       });
@@ -140,7 +146,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const deleteVIP = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/vip`, {
+      const res = await axios.post(`${baseURL}/application/vip`, {
         id: +id,
         status: 0,
       });
@@ -159,7 +165,10 @@ export const ApplicationProvider = ({ children }) => {
 
   const assignQRCode = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/qr`, { id: +id, status: 1 });
+      const res = await axios.post(`${baseURL}/application/qr`, {
+        id: +id,
+        status: 1,
+      });
 
       if (res.data.result === true) {
         setApplications((prev) => ({
@@ -177,28 +186,37 @@ export const ApplicationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (queryType !== selectedType) {
+    if (location.pathname === "/applications" && queryType !== selectedType) {
       setSearchParams({ type: selectedType });
       setSearchQuery("");
     }
-  }, [selectedType, queryType, setSearchParams]);
+  }, [selectedType, queryType, setSearchParams, location.pathname]);
 
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get(`${baseURL}/list`, {
-        params: {
-          type: selectedType === AllowedTypesMap.all ? "" : selectedType,
-          search: searchQuery,
-          page: 1,
-          limit: 1000,
-          filter: filter,
-        },
-      })
-      .then((res) => setApplications(res.data))
-      .catch((error) => console.error("Ошибка при получении данных:", error))
-      .finally(() => setLoading(false));
-  }, [selectedType, searchQuery, forceUpdate, filter]);
+    const user = localStorage.getItem("user");
+    if (!user && location.pathname === "/applications") {
+      navigate("/signin");
+    }
+  }, [location.pathname, navigate]);
+
+  useEffect(() => {
+    if (location.pathname === "/applications") {
+      setLoading(true);
+      axios
+        .get(`${baseURL}/application/list`, {
+          params: {
+            type: selectedType === AllowedTypesMap.all ? "" : selectedType,
+            search: searchQuery,
+            page: 1,
+            limit: 1000,
+            filter: filter,
+          },
+        })
+        .then((res) => setApplications(res.data))
+        .catch((error) => console.error("Ошибка при получении данных:", error))
+        .finally(() => setLoading(false));
+    }
+  }, [selectedType, searchQuery, forceUpdate, filter, location.pathname]);
 
   return (
     <ApplicationsContext.Provider

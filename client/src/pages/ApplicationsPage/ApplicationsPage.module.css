@@ -62,6 +62,10 @@
   position: relative;
 }
 
+.emptyList {
+  padding: 8px 0px 0px 8px;
+}
+
 .information {
   position: absolute;
   right: 16px;
@@ -93,6 +97,10 @@ button.informationButton {
   background-color: var(--backgroundSelectedOrHoverOption);
   cursor: pointer;
   position: relative;
+}
+
+button.informationButton:hover {
+  color: var(--allTextColor);
 }
 
 .iconsContainer {

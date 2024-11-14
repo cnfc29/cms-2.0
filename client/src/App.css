@@ -46,8 +46,12 @@ body.dark {
   /* Buttons */
   --approveBackgroundButton: #203233;
   --approveColorButton: #22cb49;
+  --approveBackgroundButtonHover: #1d2e2f;
+  --approveColorButtonHover: #3ca354;
   --rejectBackgroundButton: #3b2526;
   --rejectColorButton: #b55449;
+  --rejectBackgroundButtonHover: #342021;
+  --rejectColorButtonHover: #c37055;
 
   /* ERROR */
   --errorColor: #b55449;
@@ -55,6 +59,9 @@ body.dark {
   /* Status */
   --approveStatusColor: #9eebcf;
   --rejectStatusColor: #ebc6ba;
+
+  /* Filter */
+  --filterHoverBackgroundColor: #303749;
 }
 
 body.light {
@@ -88,8 +95,12 @@ body.light {
   /* Buttons */
   --approveBackgroundButton: #c0d8d9;
   --approveColorButton: #1ebb42;
+  --approveBackgroundButtonHover: #a6cacb;
+  --approveColorButtonHover: #529e64;
   --rejectBackgroundButton: #edd1d2;
   --rejectColorButton: #fa918d;
+  --rejectBackgroundButtonHover: #edc9cb;
+  --rejectColorButtonHover: #e2827e;
 
   /* ERROR */
   --errorColor: #fa918d;
@@ -97,6 +108,9 @@ body.light {
   /* Status */
   --approveStatusColor: #e8f9f3;
   --rejectStatusColor: #f8eeeb;
+
+  /* Filter */
+  --filterHoverBackgroundColor: #d0d8ed;
 }
 
 #root {

@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
                 changeOrigin: true,
                 secure: false,
                 rewrite: (path) =>
-                  path.replace(/^\/api/, "/laravel/public/api/application"),
+                  path.replace(/^\/api/, "/laravel/public/api"),
                 agent: new https.Agent({ rejectUnauthorized: false }),
               },
             }

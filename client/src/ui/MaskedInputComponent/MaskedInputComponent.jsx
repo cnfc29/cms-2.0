@@ -6,7 +6,6 @@ const MaskedInputComponent = forwardRef(
   ({ placeholder, error, ...rest }, ref) => {
     const inputRef = useRef();
 
-    // Передаем метод focus на ref компонента
     useImperativeHandle(ref, () => ({
       focus: () => {
         inputRef.current.inputElement.focus();
@@ -34,6 +33,18 @@ const MaskedInputComponent = forwardRef(
       /\d/,
     ];
 
+    const handleFocus = (e) => {
+      if (e.target.value === "") {
+        e.target.value = "+7 (";
+      }
+    };
+
+    const handleBlur = (e) => {
+      if (e.target.value === "+7 (") {
+        e.target.value = "";
+      }
+    };
+
     return (
       <div className={styles.inputContainer}>
         <MaskedInput
@@ -41,7 +52,9 @@ const MaskedInputComponent = forwardRef(
           mask={mask}
           placeholder={placeholder}
           className={`${styles.input} ${error ? styles.inputError : ""}`}
-          ref={inputRef} // Передаем ref на внутренний input
+          ref={inputRef}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
         />
         {error && <span className={styles.errorText}>{error.message}</span>}
       </div>

@@ -66,17 +66,23 @@ export default function MainPage() {
       const endpoints = [
         {
           key: "participationFormat",
-          url: `${baseURL}/getListParticipationFormat`,
+          url: `${baseURL}/application/getListParticipationFormat`,
         },
-        { key: "fieldOfActivity", url: `${baseURL}/getListFieldOfActivity` },
-        { key: "listYourExpertise", url: `${baseURL}/getListYourExpertise` },
+        {
+          key: "fieldOfActivity",
+          url: `${baseURL}/application/getListFieldOfActivity`,
+        },
+        {
+          key: "listYourExpertise",
+          url: `${baseURL}/application/getListYourExpertise`,
+        },
         {
           key: "listParticipationInTheCIC",
-          url: `${baseURL}/getListParticipationInTheCIC`,
+          url: `${baseURL}/application/getListParticipationInTheCIC`,
         },
         {
           key: "listParticipantStatus",
-          url: `${baseURL}/getListParticipantStatus`,
+          url: `${baseURL}/application/getListParticipantStatus`,
         },
       ];
 
@@ -112,7 +118,7 @@ export default function MainPage() {
     }
 
     try {
-      const res = await axios.post(`${baseURL}/add`, formData, {
+      const res = await axios.post(`${baseURL}/application/add`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (res.data.result === true) {

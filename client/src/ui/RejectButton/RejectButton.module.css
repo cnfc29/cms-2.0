@@ -9,3 +9,8 @@ button.button {
   color: var(--rejectColorButton);
   cursor: pointer;
 }
+
+button.button:hover {
+  background-color: var(--rejectBackgroundButtonHover);
+  color: var(--rejectColorButtonHover);
+}

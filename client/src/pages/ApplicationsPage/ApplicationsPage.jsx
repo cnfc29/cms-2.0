@@ -20,10 +20,13 @@ import SetVIPButton from "../../ui/SetVIPButton/SetVIPButton";
 import DeleteVIPButton from "../../ui/DeleteVIPButton/DeleteVIPButton";
 import ApproveButtonMenu from "../../ui/ApproveButtonMenu/ApproveButtonMenu";
 import ApprovedFilter from "../../ui/ApprovedFilter/ApprovedFilter";
+import { useNavigate } from "react-router-dom";
 
 export default function ApplicationsPage() {
   const [activeDropdownId, setActiveDropdownId] = useState(null);
   const dropdownRefs = useRef({});
+
+  const navigate = useNavigate();
 
   const {
     applications,
@@ -38,6 +41,7 @@ export default function ApplicationsPage() {
     setVIP,
     deleteVIP,
   } = useApplications();
+
   const [localSearchQuery, setLocalSearchQuery] = useState("");
 
   const handleSearchChange = (e) => {
@@ -93,13 +97,15 @@ export default function ApplicationsPage() {
         {selectedType === AllowedTypesMap.approved && <ApprovedFilter />}
         <div className={styles.applicationsList}>
           {loading || applications.cards === null ? (
-            <div>Загрузка...</div>
+            <div className={styles.emptyList}>Загрузка...</div>
           ) : (
             <>
               {applications?.cards?.length === 0 && localSearchQuery ? (
-                <div>По вашему запросу ничего не найдено</div>
+                <div className={styles.emptyList}>
+                  По вашему запросу ничего не найдено
+                </div>
               ) : applications?.cards?.length === 0 && !localSearchQuery ? (
-                <div>Список анкет пока пуст</div>
+                <div className={styles.emptyList}>Список анкет пока пуст</div>
               ) : (
                 applications?.cards?.map((card) => (
                   <div
