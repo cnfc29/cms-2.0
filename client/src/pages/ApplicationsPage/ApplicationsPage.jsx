@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./ApplicationsPage.module.css";
 import NavBar from "../../components/NavBar/NavBar";
 import ContentContainer from "../../ui/ContentContainer/ContentContainer";
@@ -10,23 +10,17 @@ import SearchInput from "../../ui/SearchInput/SearchInput";
 import CardsTitle from "../../ui/CardsTitle/CardsTitle";
 import ImageIcon from "../../ui/ImageIcon/ImageIcon";
 import QRCode from "../../ui/QRCode/QRCode";
-import ApproveButton from "../../ui/ApproveButton/ApproveButton";
-import RejectButton from "../../ui/RejectButton/RejectButton";
 import Status from "../../ui/Status/Status";
 import AssignQRCode from "../../ui/AssignQRCode/AssignQRCode";
 import VIP from "../../ui/VIP/VIP";
-import RejectButtonMenu from "../../ui/RejectButtonMenu/RejectButtonMenu";
-import SetVIPButton from "../../ui/SetVIPButton/SetVIPButton";
-import DeleteVIPButton from "../../ui/DeleteVIPButton/DeleteVIPButton";
-import ApproveButtonMenu from "../../ui/ApproveButtonMenu/ApproveButtonMenu";
 import ApprovedFilter from "../../ui/ApprovedFilter/ApprovedFilter";
-import { useNavigate } from "react-router-dom";
+import ApplicationButton from "../../ui/ApplicationButton/ApplicationButton";
+import UserInfo from "../../ui/UserInfo/UserInfo";
+import ButtonMenu from "../../ui/ButtonMenu/ButtonMenu";
 
 export default function ApplicationsPage() {
   const [activeDropdownId, setActiveDropdownId] = useState(null);
   const dropdownRefs = useRef({});
-
-  const navigate = useNavigate();
 
   const {
     applications,
@@ -58,6 +52,10 @@ export default function ApplicationsPage() {
     setActiveDropdownId((prevId) => (prevId === id ? null : id));
   };
 
+  const isApproved = selectedType === AllowedTypesMap.approved;
+  const isRejected = selectedType === AllowedTypesMap.rejected;
+  const isWithout = selectedType === AllowedTypesMap.without;
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -83,7 +81,6 @@ export default function ApplicationsPage() {
     <ContentContainer>
       <NavBar />
       <SearchInput
-        selectedType={selectedType}
         value={localSearchQuery}
         onChange={handleSearchChange}
         onClear={handleClearSearch}
@@ -94,7 +91,7 @@ export default function ApplicationsPage() {
           search={!!localSearchQuery}
           total={applications?.cards?.length}
         />
-        {selectedType === AllowedTypesMap.approved && <ApprovedFilter />}
+        {isApproved && <ApprovedFilter />}
         <div className={styles.applicationsList}>
           {loading || applications.cards === null ? (
             <div className={styles.emptyList}>Загрузка...</div>
@@ -120,11 +117,10 @@ export default function ApplicationsPage() {
                       <div className={styles.cardContent}>
                         {
                           <div className={styles.information}>
-                            {selectedType !== AllowedTypesMap.without &&
-                              (selectedType === AllowedTypesMap.rejected ||
-                                (selectedType === AllowedTypesMap.approved &&
-                                  card.qr_code === 0) ||
-                                selectedType !== AllowedTypesMap.approved) && (
+                            {!isWithout &&
+                              (isRejected ||
+                                (isApproved && card.qr_code === 0) ||
+                                !isApproved) && (
                                 <button
                                   className={styles.informationButton}
                                   onClick={() => toggleDropdown(card.id)}
@@ -144,125 +140,87 @@ export default function ApplicationsPage() {
                                     (dropdownRefs.current[card.id] = el)
                                   }
                                 >
-                                  {selectedType === AllowedTypesMap.approved &&
-                                    card.status === "approved" && (
-                                      <RejectButtonMenu
-                                        onClick={() => {
+                                  {(isApproved || isRejected) && (
+                                    <ButtonMenu
+                                      onClick={() => {
+                                        if (card.status === "approved") {
                                           rejectHandlerMenu(card.id);
-                                          setActiveDropdownId(null);
-                                        }}
-                                      />
-                                    )}
-
-                                  {selectedType === AllowedTypesMap.rejected &&
-                                    card.status === "rejected" && (
-                                      <ApproveButtonMenu
-                                        onClick={() => {
+                                        } else if (card.status === "rejected") {
                                           approveHandlerMenu(card.id);
-                                          setActiveDropdownId(null);
-                                        }}
-                                      />
-                                    )}
+                                        }
+                                        setActiveDropdownId(null);
+                                      }}
+                                    >
+                                      {card.status === "approved"
+                                        ? "В отклоненные"
+                                        : card.status === "rejected"
+                                        ? "В одобренные"
+                                        : ""}
+                                    </ButtonMenu>
+                                  )}
 
-                                  {selectedType ===
-                                    AllowedTypesMap.approved && (
-                                    <>
-                                      {card.vip === 0 ? (
-                                        <SetVIPButton
-                                          onClick={() => {
-                                            setVIP(card.id);
-                                            setActiveDropdownId(null);
-                                          }}
-                                        />
-                                      ) : (
-                                        <DeleteVIPButton
-                                          onClick={() => {
-                                            deleteVIP(card.id);
-                                            setActiveDropdownId(null);
-                                          }}
-                                        />
-                                      )}
-                                    </>
+                                  {isApproved && (
+                                    <ButtonMenu
+                                      onClick={() => {
+                                        if (card.vip === 0) {
+                                          setVIP(card.id);
+                                        } else {
+                                          deleteVIP(card.id);
+                                        }
+                                        setActiveDropdownId(null);
+                                      }}
+                                    >
+                                      {card.vip === 0
+                                        ? "Присвоить VIP"
+                                        : "Убрать VIP"}
+                                    </ButtonMenu>
                                   )}
                                 </div>
                               )}
 
-                            {card.vip === 1 &&
-                              selectedType === AllowedTypesMap.approved && (
-                                <VIP />
-                              )}
+                            {isApproved && card.vip === 1 && <VIP />}
                           </div>
                         }
                         <div className={styles.iconsContainer}>
                           <ImageIcon
                             image={`https://test.draftnew.site${card.photo}`}
                           />
-                          {selectedType === AllowedTypesMap.approved &&
-                            card.qr_code !== 0 && (
-                              <QRCode
-                                image={`https://test.draftnew.site${card.qr_code}`}
-                              />
-                            )}
+                          {isApproved && card.qr_code !== 0 && (
+                            <QRCode
+                              image={`https://test.draftnew.site${card.qr_code}`}
+                            />
+                          )}
                         </div>
                         <div className={styles.infoContainer}>
-                          <div className={styles.userInfo}>
-                            <div className={styles.userName}>
-                              {card.last_name}
-                              <br />
-                              {card.first_name + " " + card.middle_name}
-                            </div>
-                            <div className={styles.userDescription}>
-                              <div className={styles.userCompany}>
-                                <div>{card.organization}</div>
-                                <div>{card.post}</div>
-                              </div>
-                              <div className={styles.userContacts}>
-                                <div>{card.phone}</div>
-                                <div>{card.email}</div>
-                              </div>
-                              <div className={styles.userData}>
-                                <div>
-                                  Формат участия: {card.participation_format}
-                                </div>
-                                <div className={styles.itemUserData}>
-                                  <div>Сфера деятельности:</div>
-                                  {card.field_of_activity}
-                                </div>
-                                <div>
-                                  Участие в ИЦК: {card.participation_in_the_cic}
-                                </div>
-                                <div className={styles.itemUserData}>
-                                  <div>Экспертность:</div>
-                                  {card.your_expertise}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          <UserInfo card={card} />
 
-                          {selectedType === AllowedTypesMap.without &&
-                            card.status === "without" && (
-                              <div className={styles.buttons}>
-                                <ApproveButton
+                          <div className={styles.buttons}>
+                            {isWithout && card.status === "without" && (
+                              <>
+                                <ApplicationButton
+                                  type="approve"
                                   onClick={() => approveHandler(card.id)}
-                                />
-                                <RejectButton
+                                >
+                                  Одобрить
+                                </ApplicationButton>
+                                <ApplicationButton
                                   onClick={() => rejectHandler(card.id)}
-                                />
-                              </div>
+                                >
+                                  Отклонить
+                                </ApplicationButton>
+                              </>
                             )}
 
-                          {(selectedType === AllowedTypesMap.approved ||
-                            selectedType === AllowedTypesMap.rejected) && (
-                            <div className={styles.buttons}>
+                            {(isApproved || isRejected) && (
                               <Status status={card.status} />
-                              {selectedType !== AllowedTypesMap.rejected &&
-                                card.qr_code === 0 && (
-                                  <AssignQRCode
-                                    onClick={() => assignQRCode(card.id)}
-                                  />
-                                )}
-                            </div>
-                          )}
+                            )}
+
+                            {isApproved && card.qr_code === 0 && (
+                              <AssignQRCode
+                                onClick={() => assignQRCode(card.id)}
+                              />
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

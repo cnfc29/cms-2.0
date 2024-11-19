@@ -1,0 +1,22 @@
+button.btn {
+  font-size: 14px;
+  line-height: 20px;
+  border-radius: 16px;
+  background-color: var(--backgroundSelectedOrHoverOption);
+  color: var(--descriptionText);
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+button.btn.active {
+  background-color: var(--purpleColor);
+  color: var(--whiteColor);
+}
+
+button.btn.active:hover {
+  background-color: var(--purpleColor);
+}
+
+button.btn:hover {
+  background-color: var(--filterHoverBackgroundColor);
+}

@@ -1,6 +1,8 @@
-import React from "react";
 import styles from "./SearchInput.module.css";
-import { AllowedTypesMap } from "../../HOCs/ApplicationsContext";
+import {
+  AllowedTypesMap,
+  useApplications,
+} from "../../HOCs/ApplicationsContext";
 
 const placeholderHelper = (type) => {
   let placeholder;
@@ -25,12 +27,8 @@ const placeholderHelper = (type) => {
   return placeholder;
 };
 
-export default function SearchInput({
-  value,
-  onChange,
-  onClear,
-  selectedType,
-}) {
+export default function SearchInput({ value, onChange, onClear }) {
+  const { selectedType } = useApplications();
   const placeholder = placeholderHelper(selectedType);
   return (
     <div className={styles.container}>

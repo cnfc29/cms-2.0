@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./ImageIcon.module.css";
 
 export default function ImageIcon({ image }) {

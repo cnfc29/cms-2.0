@@ -109,46 +109,6 @@ button.informationButton:hover {
   gap: 8px;
 }
 
-.userInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 580px;
-  flex-grow: 1;
-}
-
-.userName {
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 800;
-  flex-grow: 1;
-}
-
-.userDescription {
-  width: 100%;
-  display: flex;
-  font-size: 12px;
-  line-height: 16px;
-  color: var(--descriptionText);
-  flex-grow: 1;
-  gap: 25px;
-}
-
-.userCompany,
-.userContacts,
-.userData,
-.itemUserData {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-}
-
-.userCompany,
-.userContacts {
-  max-width: 150px;
-}
-
 .buttons {
   display: flex;
   max-width: 228px;
@@ -173,23 +133,9 @@ button.informationButton:hover {
     align-self: flex-start;
     margin-left: 0;
   }
-
-  .userCompany,
-  .userContacts,
-  .userInfo {
-    max-width: 100%;
-  }
 }
 
 @media screen and (max-width: 620px) {
-  .userDescription {
-    flex-direction: column;
-  }
-
-  .userDescription {
-    gap: 12px;
-  }
-
   .buttons {
     margin-top: 16px;
   }

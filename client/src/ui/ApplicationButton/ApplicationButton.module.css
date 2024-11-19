@@ -5,12 +5,25 @@ button.button {
   line-height: 16px;
   padding: 12px 24px;
   border-radius: 8px;
-  background-color: var(--approveBackgroundButton);
-  color: var(--approveColorButton);
   cursor: pointer;
 }
 
-button.button:hover {
+button.button.approve {
+  background-color: var(--approveBackgroundButton);
+  color: var(--approveColorButton);
+}
+
+button.button.approve:hover {
   background-color: var(--approveBackgroundButtonHover);
   color: var(--approveColorButtonHover);
+}
+
+button.button.reject {
+  background-color: var(--rejectBackgroundButton);
+  color: var(--rejectColorButton);
+}
+
+button.button.reject:hover {
+  background-color: var(--rejectBackgroundButtonHover);
+  color: var(--rejectColorButtonHover);
 }

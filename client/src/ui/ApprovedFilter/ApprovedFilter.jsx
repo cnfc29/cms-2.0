@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./ApprovedFilter.module.css";
 import { useApplications } from "../../HOCs/ApplicationsContext";
+import FilterButton from "../FilterButton/FilterButton";
+import { filterButtons } from "./constant";
 
 export default function ApprovedFilter() {
   const { setFilter } = useApplications();
@@ -12,39 +14,18 @@ export default function ApprovedFilter() {
   };
 
   return (
-    <div className={styles.container}>
-      <button
-        onClick={() => handleFilterChange("all", {})}
-        className={`${styles.btn} ${
-          activeFilter === "all" ? styles.active : ""
-        }`}
-      >
-        Все
-      </button>
-      <button
-        onClick={() => handleFilterChange("qr1", { qr: 1 })}
-        className={`${styles.btn} ${
-          activeFilter === "qr1" ? styles.active : ""
-        }`}
-      >
-        есть QR
-      </button>
-      <button
-        onClick={() => handleFilterChange("qr0", { qr: 0 })}
-        className={`${styles.btn} ${
-          activeFilter === "qr0" ? styles.active : ""
-        }`}
-      >
-        нет QR
-      </button>
-      <button
-        onClick={() => handleFilterChange("vip", { vip: 1 })}
-        className={`${styles.btn} ${
-          activeFilter === "vip" ? styles.active : ""
-        }`}
-      >
-        VIP
-      </button>
-    </div>
+    <>
+      <div className={styles.container}>
+        {filterButtons.map(({ label, value, filterKey }) => (
+          <FilterButton
+            key={filterKey}
+            onClick={() => handleFilterChange(filterKey, value)}
+            active={activeFilter === filterKey}
+          >
+            {label}
+          </FilterButton>
+        ))}
+      </div>
+    </>
   );
 }
