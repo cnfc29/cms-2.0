@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import styles from "./SignInPage.module.css";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { signIn } from "../../API/api";
 
 const schema = yup.object().shape({
   login: yup.string().required("Логин обязателен"),
@@ -16,14 +16,12 @@ export default function SignInPage() {
 
   const navigate = useNavigate();
 
-  const baseURL = import.meta.env.VITE_API_BASE_URL;
-
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
       navigate("/applications");
     }
-  }, []);
+  }, [navigate]);
 
   const {
     register,
@@ -33,9 +31,9 @@ export default function SignInPage() {
     resolver: yupResolver(schema),
   });
 
-  const signIn = async (data) => {
+  const signInHandler = async (data) => {
     try {
-      const res = await axios.post(`${baseURL}/user/login`, data);
+      const res = await signIn(data);
       if (res.data.result === true) {
         localStorage.setItem("user", true);
         navigate("/applications");
@@ -51,7 +49,7 @@ export default function SignInPage() {
     <div className={styles.parent}>
       <div className={styles.container}>
         <div className={styles.text}>Авторизация</div>
-        <form onSubmit={handleSubmit(signIn)} className={styles.form}>
+        <form onSubmit={handleSubmit(signInHandler)} className={styles.form}>
           <div className={styles.inputsList}>
             <input
               className={`${styles.input} ${

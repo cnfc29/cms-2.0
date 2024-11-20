@@ -1,8 +1,7 @@
-import React from "react";
 import styles from "./NavBar.module.css";
 import ItemLink from "../../ui/ItemLink/ItemLink";
 import { useApplications } from "../../HOCs/ApplicationsContext";
-import { AllowedTypesMap } from "../../HOCs/ApplicationsContext";
+import { AllowedTypesMap } from "../../HOCs/constant";
 import settingsIcon from "@images/components/NavBar/images/settingsIcon.svg";
 
 export default function NavBar() {

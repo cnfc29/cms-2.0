@@ -9,7 +9,7 @@ import RegistrationButton from "../../ui/RegistrationButton/RegistrationButton";
 import { useNavigate } from "react-router-dom";
 import CustomSelect from "../../ui/CustomSelect/CustomSelect";
 import MaskedInputComponent from "../../ui/MaskedInputComponent/MaskedInputComponent";
-import axios from "axios";
+import { fetchSelectData, submitFormRegistration } from "../../API/api";
 
 export default function MainPage() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -19,7 +19,6 @@ export default function MainPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-  const baseURL = import.meta.env.VITE_API_BASE_URL;
 
   const validationSchema = Yup.object().shape({
     last_name: Yup.string().required("Заполните поле"),
@@ -63,37 +62,7 @@ export default function MainPage() {
 
   const getData = async () => {
     try {
-      const endpoints = [
-        {
-          key: "participationFormat",
-          url: `${baseURL}/application/getListParticipationFormat`,
-        },
-        {
-          key: "fieldOfActivity",
-          url: `${baseURL}/application/getListFieldOfActivity`,
-        },
-        {
-          key: "listYourExpertise",
-          url: `${baseURL}/application/getListYourExpertise`,
-        },
-        {
-          key: "listParticipationInTheCIC",
-          url: `${baseURL}/application/getListParticipationInTheCIC`,
-        },
-        {
-          key: "listParticipantStatus",
-          url: `${baseURL}/application/getListParticipantStatus`,
-        },
-      ];
-
-      const responses = await Promise.all(
-        endpoints.map((endpoint) => axios.get(endpoint.url))
-      );
-      const data = responses.reduce((acc, res, index) => {
-        acc[endpoints[index].key] = res.data;
-        return acc;
-      }, {});
-
+      const data = await fetchSelectData();
       setSelectData(data);
       setLoading(false);
     } catch (error) {
@@ -118,9 +87,7 @@ export default function MainPage() {
     }
 
     try {
-      const res = await axios.post(`${baseURL}/application/add`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await submitFormRegistration(formData);
       if (res.data.result === true) {
         navigate("/success");
       } else {

@@ -1,18 +1,16 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import debounce from "lodash.debounce";
+import { AllowedTypesMap, allowedTypes } from "./constant";
+import {
+  approve,
+  reject,
+  assignQRCodeFn,
+  setVIPStatus,
+  fetchApplications,
+} from "../API/api";
 
 const ApplicationsContext = createContext();
-
-const allowedTypes = ["all", "without", "approved", "rejected"];
-
-export const AllowedTypesMap = {
-  all: "all",
-  without: "without",
-  approved: "approved",
-  rejected: "rejected",
-};
 
 export const ApplicationProvider = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -34,8 +32,6 @@ export const ApplicationProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState({});
 
-  const baseURL = import.meta.env.VITE_API_BASE_URL;
-
   const debouncedSearch = debounce((query) => {
     setSearchQuery(query);
   }, 500);
@@ -45,92 +41,33 @@ export const ApplicationProvider = ({ children }) => {
     setApplications((prev) => ({ ...prev, cards: null }));
   };
 
-  const approveHandler = async (id) => {
+  const approveHandler = async (id, updateStateCallback) => {
     try {
-      const res = await axios.post(`${baseURL}/application/approved`, {
-        id: +id,
-        status: 1,
-      });
+      const res = await approve(id);
 
       if (res.status === 200) {
-        setApplications((prev) => ({
-          ...prev,
-          cards: prev.cards.filter((card) => card.id !== id),
-          without: prev.without - 1,
-          approved: prev.approved + 1,
-        }));
+        updateStateCallback(id);
       }
     } catch (error) {
       console.error("Ошибка при обновлении статуса заявки:", error);
     }
   };
 
-  const approveHandlerMenu = async (id) => {
+  const rejectHandler = async (id, updateStateCallback) => {
     try {
-      const res = await axios.post(`${baseURL}/application/approved`, {
-        id: +id,
-        status: 1,
-      });
+      const res = await reject(id);
 
       if (res.status === 200) {
-        setApplications((prev) => ({
-          ...prev,
-          cards: prev.cards.filter((card) => card.id !== id),
-          rejected: prev.rejected - 1,
-          approved: prev.approved + 1,
-        }));
+        updateStateCallback(id);
       }
     } catch (error) {
       console.error("Ошибка при обновлении статуса заявки:", error);
-    }
-  };
-
-  const rejectHandler = async (id) => {
-    try {
-      const res = await axios.post(`${baseURL}/application/approved`, {
-        id: +id,
-        status: 0,
-      });
-
-      if (res.status === 200) {
-        setApplications((prev) => ({
-          ...prev,
-          cards: prev.cards.filter((card) => card.id !== id),
-          without: prev.without - 1,
-          rejected: prev.rejected + 1,
-        }));
-      }
-    } catch (error) {
-      console.error("Ошибка при отклонении заявки:", error);
-    }
-  };
-
-  const rejectHandlerMenu = async (id) => {
-    try {
-      const res = await axios.post(`${baseURL}/application/approved`, {
-        id: +id,
-        status: 0,
-      });
-
-      if (res.status === 200) {
-        setApplications((prev) => ({
-          ...prev,
-          cards: prev.cards.filter((card) => card.id !== id),
-          approved: prev.approved - 1,
-          rejected: prev.rejected + 1,
-        }));
-      }
-    } catch (error) {
-      console.error("Ошибка при отклонении заявки:", error);
     }
   };
 
   const setVIP = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/application/vip`, {
-        id: +id,
-        status: 1,
-      });
+      const res = await setVIPStatus(id, 1);
       if (res.status === 200) {
         setApplications((prev) => ({
           ...prev,
@@ -146,10 +83,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const deleteVIP = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/application/vip`, {
-        id: +id,
-        status: 0,
-      });
+      const res = await setVIPStatus(id, 0);
       if (res.status === 200) {
         setApplications((prev) => ({
           ...prev,
@@ -165,10 +99,7 @@ export const ApplicationProvider = ({ children }) => {
 
   const assignQRCode = async (id) => {
     try {
-      const res = await axios.post(`${baseURL}/application/qr`, {
-        id: +id,
-        status: 1,
-      });
+      const res = await assignQRCodeFn(id);
 
       if (res.data.result === true) {
         setApplications((prev) => ({
@@ -201,20 +132,25 @@ export const ApplicationProvider = ({ children }) => {
 
   useEffect(() => {
     if (location.pathname === "/applications") {
-      setLoading(true);
-      axios
-        .get(`${baseURL}/application/list`, {
-          params: {
+      const loadApplications = async () => {
+        try {
+          setLoading(true);
+          const data = await fetchApplications({
             type: selectedType === AllowedTypesMap.all ? "" : selectedType,
             search: searchQuery,
             page: 1,
             limit: 1000,
-            filter: filter,
-          },
-        })
-        .then((res) => setApplications(res.data))
-        .catch((error) => console.error("Ошибка при получении данных:", error))
-        .finally(() => setLoading(false));
+            filter,
+          });
+          setApplications(data);
+        } catch (error) {
+          console.error("Ошибка при загрузке заявок:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      loadApplications();
     }
   }, [selectedType, searchQuery, forceUpdate, filter, location.pathname]);
 
@@ -236,13 +172,12 @@ export const ApplicationProvider = ({ children }) => {
         loading,
         setSearchQuery: debouncedSearch,
         approveHandler,
-        approveHandlerMenu,
         rejectHandler,
-        rejectHandlerMenu,
         assignQRCode,
         setVIP,
         deleteVIP,
         setFilter,
+        setApplications,
       }}
     >
       {children}

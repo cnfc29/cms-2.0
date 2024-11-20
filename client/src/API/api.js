@@ -35,11 +35,66 @@ export const fetchSelectData = async () => {
   }, {});
 };
 
-export const submitForm = async (formData) => {
+export const submitFormRegistration = async (formData) => {
   const response = await api.post("/application/add", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return response;
+};
+
+export const signIn = async (data) => {
+  const response = await api.post("/user/login", data);
+  return response;
+};
+
+export const approve = async (id) => {
+  const response = await api.post("/application/approved", {
+    id: +id,
+    status: 1,
+  });
+  return response;
+};
+
+export const reject = async (id) => {
+  const response = await api.post("/application/approved", {
+    id: +id,
+    status: 0,
+  });
+  return response;
+};
+
+export const setVIPStatus = async (id, status) => {
+  const response = await api.post("/application/vip", {
+    id: +id,
+    status,
+  });
+  return response;
+};
+
+export const assignQRCodeFn = async (id) => {
+  const response = await api.post("/application/qr", {
+    id: +id,
+    status: 1,
+  });
+  return response;
+};
+
+export const fetchApplications = async ({
+  type = "",
+  search = "",
+  page = 1,
+  limit = 1000,
+  filter = {},
+}) => {
+  try {
+    const response = await api.get("/application/list", {
+      params: { type, search, page, limit, filter },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении заявок:", error);
+    throw error;
+  }
 };
 
 export default api;

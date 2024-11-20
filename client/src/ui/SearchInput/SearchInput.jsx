@@ -1,8 +1,6 @@
 import styles from "./SearchInput.module.css";
-import {
-  AllowedTypesMap,
-  useApplications,
-} from "../../HOCs/ApplicationsContext";
+import { useApplications } from "../../HOCs/ApplicationsContext";
+import { AllowedTypesMap } from "../../HOCs/constant";
 
 const placeholderHelper = (type) => {
   let placeholder;

@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./UserInfo.module.css";
 
 export default function UserInfo({ card }) {
@@ -24,11 +23,11 @@ export default function UserInfo({ card }) {
             <div>Сфера деятельности:</div>
             {card.field_of_activity}
           </div>
-          <div>Участие в ИЦК: {card.participation_in_the_cic}</div>
           <div className={styles.itemUserData}>
             <div>Экспертность:</div>
             {card.your_expertise}
           </div>
+          <div>Участие в ИЦК: {card.participation_in_the_cic}</div>
         </div>
       </div>
     </div>

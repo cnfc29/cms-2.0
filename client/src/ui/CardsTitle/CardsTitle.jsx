@@ -1,6 +1,5 @@
-import React from "react";
 import styles from "./CardsTitle.module.css";
-import { AllowedTypesMap } from "../../HOCs/ApplicationsContext";
+import { AllowedTypesMap } from "../../HOCs/constant";
 
 const cardTitleHelper = (type, search) => {
   let cardTitle;
