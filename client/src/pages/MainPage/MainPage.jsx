@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
 import styles from "./MainPage.module.css";
 import Input from "../../ui/Input/Input";
 import DragAndDrop from "../../ui/DragAndDrop/DragAndDrop";
@@ -9,41 +8,15 @@ import RegistrationButton from "../../ui/RegistrationButton/RegistrationButton";
 import { useNavigate } from "react-router-dom";
 import CustomSelect from "../../ui/CustomSelect/CustomSelect";
 import MaskedInputComponent from "../../ui/MaskedInputComponent/MaskedInputComponent";
-import { fetchSelectData, submitFormRegistration } from "../../API/api";
+import { submitFormRegistration } from "../../API/api";
+import { validationSchema } from "./validationSchema";
+import { useFetchData } from "../../hooks/useFetchData";
 
 export default function MainPage() {
   const [selectedFile, setSelectedFile] = useState(null);
-  const [selectData, setSelectData] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
-  const validationSchema = Yup.object().shape({
-    last_name: Yup.string().required("Заполните поле"),
-    first_name: Yup.string().required("Заполните поле"),
-    middle_name: Yup.string().required("Заполните поле"),
-    organization: Yup.string().required("Заполните поле"),
-    post: Yup.string().required("Заполните поле"),
-    phone: Yup.string()
-      .required("Заполните поле")
-      .matches(
-        /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
-        "Введите полный номер телефона"
-      ),
-    email: Yup.string()
-      .email("Введите корректный email")
-      .required("Заполните поле"),
-    participation_format: Yup.object().required("Заполните поле").nullable(),
-    field_of_activity: Yup.object().required("Заполните поле").nullable(),
-    your_expertise: Yup.object().required("Заполните поле").nullable(),
-    participation_in_the_cic: Yup.object()
-      .required("Заполните поле")
-      .nullable(),
-    participant_status: Yup.object().required("Заполните поле").nullable(),
-    photo: Yup.mixed().required("Пожалуйста, загрузите файл"),
-  });
 
   const {
     register,
@@ -60,22 +33,7 @@ export default function MainPage() {
     },
   });
 
-  const getData = async () => {
-    try {
-      const data = await fetchSelectData();
-      setSelectData(data);
-      setLoading(false);
-    } catch (error) {
-      setError(true);
-      console.error("Ошибка при получении данных, попробуйте позже ...", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
+  const { selectData, loading, error } = useFetchData();
 
   const submitHandler = async (data) => {
     setIsSubmitting(true);

@@ -3,4 +3,5 @@ export const ROUTER = {
   success: "/success",
   signIn: "/signin",
   applications: "/applications",
+  application: "/application",
 };

@@ -3,4 +3,13 @@
   height: 48px;
   border-radius: 8px;
   object-fit: cover;
+  background-color: var(--inputBackgroundColor);
+}
+
+.image.big img {
+  width: 144px;
+  height: 144px;
+  border-radius: 12px;
+  object-fit: cover;
+  background-color: var(--inputBackgroundColor);
 }

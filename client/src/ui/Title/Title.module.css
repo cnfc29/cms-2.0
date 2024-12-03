@@ -1,0 +1,28 @@
+.title {
+  display: flex;
+  gap: 12px;
+  padding: 28px 48px 32px;
+}
+
+.fio {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 800;
+}
+
+.statusContainer {
+  display: flex;
+  gap: 12px;
+}
+
+@media screen and (max-width: 555px) {
+  .title {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 16px 0px 16px;
+  }
+
+  .statusContainer {
+    gap: 6px;
+  }
+}

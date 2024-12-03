@@ -3,7 +3,7 @@ import Select from "react-select";
 import "./CustomSelect.css";
 
 const CustomSelect = forwardRef(
-  ({ options, placeholder, onChange, value, isSearchable, error }, ref) => {
+  ({ options, placeholder, onChange, value, isSearchable, error, defaultValue }, ref) => {
     const customStyles = {
       control: (provided) => ({
         ...provided,
@@ -68,6 +68,7 @@ const CustomSelect = forwardRef(
           placeholder={placeholder}
           onChange={onChange}
           value={value}
+          defaultValue={defaultValue}
           classNamePrefix="customSelect"
           isSearchable={isSearchable}
         />

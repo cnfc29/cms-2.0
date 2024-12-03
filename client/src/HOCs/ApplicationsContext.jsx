@@ -9,6 +9,7 @@ import {
   setVIPStatus,
   fetchApplications,
 } from "../API/api";
+import { ROUTER } from "../router.config";
 
 const ApplicationsContext = createContext();
 
@@ -131,7 +132,10 @@ export const ApplicationProvider = ({ children }) => {
   }, [location.pathname, navigate]);
 
   useEffect(() => {
-    if (location.pathname === "/applications") {
+    if (
+      location.pathname === ROUTER.applications ||
+      location.pathname.includes(ROUTER.application)
+    ) {
       const loadApplications = async () => {
         try {
           setLoading(true);

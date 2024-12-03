@@ -97,4 +97,14 @@ export const fetchApplications = async ({
   }
 };
 
+export const getOneApplication = async (id) => {
+  try {
+    const res = await api("/application/item", { params: { id } });
+    return res.data;
+  } catch (error) {
+    console.error("Ошибка при получении заявки:", error.message);
+    throw error;
+  }
+};
+
 export default api;

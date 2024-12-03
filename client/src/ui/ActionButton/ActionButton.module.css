@@ -1,0 +1,13 @@
+button.button {
+  font-size: 12px;
+  line-height: 16px;
+  border-radius: 16px;
+  padding: 4px 12px;
+  color: var(--descriptionText);
+  background-color: var(--backgroundSelectedOrHoverOption);
+  cursor: pointer;
+}
+
+button.button:hover {
+  color: var(--allTextColor);
+}

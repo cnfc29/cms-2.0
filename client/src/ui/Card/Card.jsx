@@ -10,6 +10,8 @@ import Status from "../Status/Status";
 import styles from "./Card.module.css";
 import { useApplications } from "../../HOCs/ApplicationsContext";
 import { AllowedTypesMap } from "../../HOCs/constant";
+import { useNavigate } from "react-router-dom";
+import { ROUTER } from "../../router.config";
 
 export default function Card({ card }) {
   const {
@@ -29,6 +31,8 @@ export default function Card({ card }) {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -106,21 +110,18 @@ export default function Card({ card }) {
       <div className={styles.cardContainer + " " + styles[selectedType]}>
         <div className={styles.cardContent}>
           <div className={styles.information}>
-            {!isWithout &&
-              (isRejected ||
-                (isApproved && card.qr_code === 0) ||
-                !isApproved) && (
-                <button
-                  className={styles.informationButton}
-                  onClick={toggleDropdown}
-                >
-                  Информация
-                </button>
-              )}
+            {(isApproved || isRejected) && (
+              <button
+                className={styles.informationButton}
+                onClick={toggleDropdown}
+              >
+                Действия
+              </button>
+            )}
 
             {isDropdownOpen && !isAll && (
               <div className={styles.popoverContent} ref={dropdownRef}>
-                {(isApproved || isRejected) && (
+                {((isApproved && card.qr_code === 0) || isRejected) && (
                   <ButtonMenu onClick={changeStatus}>
                     {card.status === "approved"
                       ? "В отклоненные"
@@ -128,9 +129,17 @@ export default function Card({ card }) {
                   </ButtonMenu>
                 )}
 
-                {isApproved && (
+                {/* {isApproved && (
                   <ButtonMenu onClick={changeVIP}>
                     {card.vip === 0 ? "Присвоить VIP" : "Убрать VIP"}
+                  </ButtonMenu>
+                )} */}
+
+                {isApproved && (
+                  <ButtonMenu
+                    onClick={() => navigate(`${ROUTER.application}/${card.id}`)}
+                  >
+                    Редактировать
                   </ButtonMenu>
                 )}
               </div>
@@ -140,9 +149,13 @@ export default function Card({ card }) {
           </div>
 
           <div className={styles.iconsContainer}>
-            <ImageIcon image={`https://test.draftnew.site${card.photo}`} />
+            <ImageIcon
+              image={`${import.meta.env.VITE_PROXY_TARGET}${card.photo}`}
+            />
             {isApproved && card.qr_code !== 0 && (
-              <QRCode image={`https://test.draftnew.site${card.qr_code}`} />
+              <QRCode
+                image={`${import.meta.env.VITE_PROXY_TARGET}${card.qr_code}`}
+              />
             )}
           </div>
           <div className={styles.infoContainer}>
