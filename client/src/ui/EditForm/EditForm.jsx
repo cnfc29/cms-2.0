@@ -43,6 +43,7 @@ export default function EditForm({
             <Input
               type="text"
               placeholder="Фамилия"
+              label="Фамилия"
               defaultValue={card.last_name}
               {...register("last_name")}
               error={errors.last_name}
@@ -50,6 +51,7 @@ export default function EditForm({
             <Input
               type="text"
               placeholder="Имя"
+              label="Имя"
               defaultValue={card.first_name}
               {...register("first_name")}
               error={errors.first_name}
@@ -57,6 +59,7 @@ export default function EditForm({
             <Input
               type="text"
               placeholder="Отчество"
+              label="Отчество"
               defaultValue={card.middle_name}
               {...register("middle_name")}
               error={errors.middle_name}
@@ -64,6 +67,7 @@ export default function EditForm({
             <Input
               type="text"
               placeholder="Организация"
+              label="Организация"
               defaultValue={card.organization}
               {...register("organization")}
               error={errors.organization}
@@ -71,6 +75,7 @@ export default function EditForm({
             <Input
               type="text"
               placeholder="Должность"
+              label="Должность"
               defaultValue={card.post}
               {...register("post")}
               error={errors.post}
@@ -82,6 +87,7 @@ export default function EditForm({
                 <MaskedInputComponent
                   {...field}
                   placeholder="Телефон"
+                  label="Телефон"
                   error={errors.phone}
                   defaultValue={card.phone}
                 />
@@ -90,6 +96,7 @@ export default function EditForm({
             <Input
               type="text"
               placeholder="Почта"
+              label="Почта"
               defaultValue={card.email}
               {...register("email")}
               error={errors.email}

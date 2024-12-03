@@ -3,7 +3,7 @@ import MaskedInput from "react-text-mask";
 import styles from "../Input/Input.module.css";
 
 const MaskedInputComponent = forwardRef(
-  ({ placeholder, error, ...rest }, ref) => {
+  ({ placeholder, error, label, ...rest }, ref) => {
     const inputRef = useRef();
 
     useImperativeHandle(ref, () => ({
@@ -47,6 +47,7 @@ const MaskedInputComponent = forwardRef(
 
     return (
       <div className={styles.inputContainer}>
+        {label && <div className={styles.label}>{label}</div>}
         <MaskedInput
           {...rest}
           mask={mask}

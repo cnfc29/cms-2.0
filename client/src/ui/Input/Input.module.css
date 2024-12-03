@@ -4,6 +4,13 @@
   gap: 6px;
 }
 
+.label {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--inputPlaceholderColor);
+  padding-left: 8px;
+}
+
 input.input {
   width: 100%;
   height: 56px;
