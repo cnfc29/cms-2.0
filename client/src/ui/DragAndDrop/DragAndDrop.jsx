@@ -42,9 +42,9 @@ export default function DragAndDrop({
       {action ? (
         <div>
           <input {...getInputProps()} />
-          <button {...getRootProps()} className={styles.button}>
+          <div {...getRootProps()} className={styles.button}>
             {children}
-          </button>
+          </div>
         </div>
       ) : (
         <div className={styles.dragAndDropZone}>

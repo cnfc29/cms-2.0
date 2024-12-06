@@ -107,4 +107,11 @@ export const getOneApplication = async (id) => {
   }
 };
 
+export const submitUpdateApplication = async (formData) => {
+  const response = await api.post("/application/edit", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response;
+};
+
 export default api;

@@ -50,6 +50,19 @@ form.form {
   gap: 16px;
 }
 
+.selectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--inputPlaceholderColor);
+  padding-left: 8px;
+}
+
 @media screen and (max-width: 670px) {
   .mainContainer {
     flex-direction: column;

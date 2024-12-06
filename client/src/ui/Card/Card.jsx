@@ -12,6 +12,7 @@ import { useApplications } from "../../HOCs/ApplicationsContext";
 import { AllowedTypesMap } from "../../HOCs/constant";
 import { useNavigate } from "react-router-dom";
 import { ROUTER } from "../../router.config";
+import userIcon from "@images/ui/ImageIcon/images/user-icon.svg";
 
 export default function Card({ card }) {
   const {
@@ -150,12 +151,13 @@ export default function Card({ card }) {
 
           <div className={styles.iconsContainer}>
             <ImageIcon
-              image={`${import.meta.env.VITE_PROXY_TARGET}${card.photo}`}
+              image={
+                card.photo ? `https://test.draftnew.site${card.photo}` : ""
+              }
             />
+
             {isApproved && card.qr_code !== 0 && (
-              <QRCode
-                image={`${import.meta.env.VITE_PROXY_TARGET}${card.qr_code}`}
-              />
+              <QRCode image={`https://test.draftnew.site${card.qr_code}`} />
             )}
           </div>
           <div className={styles.infoContainer}>

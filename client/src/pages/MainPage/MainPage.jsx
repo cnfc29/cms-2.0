@@ -11,6 +11,7 @@ import MaskedInputComponent from "../../ui/MaskedInputComponent/MaskedInputCompo
 import { submitFormRegistration } from "../../API/api";
 import { validationSchema } from "./validationSchema";
 import { useFetchData } from "../../hooks/useFetchData";
+import { ROUTER } from "../../router.config";
 
 export default function MainPage() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -47,7 +48,7 @@ export default function MainPage() {
     try {
       const res = await submitFormRegistration(formData);
       if (res.data.result === true) {
-        navigate("/success");
+        navigate(ROUTER.success);
       } else {
         setErrorMessage("Такой номер или почта уже зарегистрированы");
       }

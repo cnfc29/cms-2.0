@@ -60,6 +60,7 @@ img.previewImage {
 }
 
 .button {
+  display: inline-block;
   font-size: 12px;
   line-height: 16px;
   border-radius: 16px;

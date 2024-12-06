@@ -20,11 +20,12 @@ export const ApplicationProvider = ({ children }) => {
   const queryType = searchParams.get("type");
 
   const initialType =
-    location.pathname === "/applications" && allowedTypes.includes(queryType)
+    location.pathname === ROUTER.applications &&
+    allowedTypes.includes(queryType)
       ? queryType
-      : location.pathname === "/applications"
+      : location.pathname === ROUTER.applications
       ? AllowedTypesMap.all
-      : null;
+      : AllowedTypesMap.approved; // TO DO переделать
 
   const [selectedType, setSelectedType] = useState(initialType);
   const [applications, setApplications] = useState({});
@@ -118,7 +119,7 @@ export const ApplicationProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (location.pathname === "/applications" && queryType !== selectedType) {
+    if (location.pathname === ROUTER.applications) {
       setSearchParams({ type: selectedType });
       setSearchQuery("");
     }
@@ -126,7 +127,7 @@ export const ApplicationProvider = ({ children }) => {
 
   useEffect(() => {
     const user = localStorage.getItem("user");
-    if (!user && location.pathname === "/applications") {
+    if (!user && location.pathname.includes(ROUTER.application)) {
       navigate("/signin");
     }
   }, [location.pathname, navigate]);
@@ -157,6 +158,8 @@ export const ApplicationProvider = ({ children }) => {
       loadApplications();
     }
   }, [selectedType, searchQuery, forceUpdate, filter, location.pathname]);
+
+  // types, applications, filter - TO DO Providers
 
   return (
     <ApplicationsContext.Provider

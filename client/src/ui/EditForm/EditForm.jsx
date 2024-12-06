@@ -8,18 +8,24 @@ import MaskedInputComponent from "../MaskedInputComponent/MaskedInputComponent";
 import ImageIcon from "../ImageIcon/ImageIcon";
 import ActionButton from "../ActionButton/ActionButton";
 import CustomSelect from "../CustomSelect/CustomSelect";
-import userIcon from "@images/ui/ImageIcon/images/user-icon.svg";
 import DragAndDrop from "../DragAndDrop/DragAndDrop";
-export default function EditForm({
-  card,
-  selectData,
-  changeVIP,
-  vip,
-  selectedFile,
-  deleteImage,
-  setSelectedFile,
-}) {
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validationSchema } from "./validationSchema";
+import { useEditApplication } from "../../HOCs/EditApplicationProvider";
+
+export default function EditForm() {
   const navigate = useNavigate();
+
+  const {
+    card,
+    selectData,
+    vip,
+    changeVIP,
+    selectedFile,
+    deleteImage,
+    setSelectedFile,
+    submitHandler,
+  } = useEditApplication();
 
   const {
     register,
@@ -28,16 +34,13 @@ export default function EditForm({
     setValue,
     formState: { errors },
     clearErrors,
-    reset,
   } = useForm({
-    // resolver: yupResolver(validationSchema),
-    defaultValues: {
-      photo: null,
-    },
+    resolver: yupResolver(validationSchema),
   });
+
   return (
     <div className={styles.container}>
-      <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+      <form className={styles.form} onSubmit={handleSubmit(submitHandler)}>
         <div className={styles.mainContainer}>
           <div className={styles.inputContainer}>
             <Input
@@ -102,114 +105,145 @@ export default function EditForm({
               error={errors.email}
             />
 
-            <Controller
-              name="participation_format"
-              control={control}
-              render={({ field }) => (
-                <CustomSelect
-                  {...field}
-                  options={selectData.participationFormat?.options || []}
-                  placeholder={
-                    selectData.participationFormat?.placeholder || "Выберите..."
-                  }
-                  isSearchable={false}
-                  error={errors.participation_format}
-                  defaultValue={selectData.participationFormat?.options.find(
-                    (option) => option.label === card.participation_format
-                  )}
-                />
-              )}
-            />
+            <div className={styles.selectContainer}>
+              <div className={styles.label}>
+                {selectData.participationFormat?.placeholder}
+              </div>
+              <Controller
+                name="participation_format"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    {...field}
+                    options={selectData.participationFormat?.options || []}
+                    placeholder={
+                      selectData.participationFormat?.placeholder ||
+                      "Выберите..."
+                    }
+                    isSearchable={false}
+                    error={errors.participation_format}
+                    defaultValue={selectData?.participationFormat?.options.find(
+                      (option) => option.label === card.participation_format
+                    )}
+                  />
+                )}
+              />
+            </div>
 
-            <Controller
-              name="field_of_activity"
-              control={control}
-              render={({ field }) => (
-                <CustomSelect
-                  {...field}
-                  options={selectData.fieldOfActivity?.options || []}
-                  placeholder={
-                    selectData.fieldOfActivity?.placeholder || "Выберите..."
-                  }
-                  isSearchable={false}
-                  error={errors.field_of_activity}
-                  defaultValue={selectData.fieldOfActivity?.options.find(
-                    (option) => option.label === card.field_of_activity
-                  )}
-                />
-              )}
-            />
+            <div className={styles.selectContainer}>
+              <div className={styles.label}>
+                {selectData.fieldOfActivity?.placeholder}
+              </div>
+              <Controller
+                name="field_of_activity"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    {...field}
+                    options={selectData.fieldOfActivity?.options || []}
+                    placeholder={
+                      selectData.fieldOfActivity?.placeholder || "Выберите..."
+                    }
+                    isSearchable={false}
+                    error={errors.field_of_activity}
+                    defaultValue={selectData.fieldOfActivity?.options.find(
+                      (option) => option.label === card.field_of_activity
+                    )}
+                  />
+                )}
+              />
+            </div>
 
-            <Controller
-              name="your_expertise"
-              control={control}
-              render={({ field }) => (
-                <CustomSelect
-                  {...field}
-                  options={selectData.listYourExpertise?.options || []}
-                  placeholder={
-                    selectData.listYourExpertise?.placeholder || "Выберите..."
-                  }
-                  isSearchable={false}
-                  error={errors.your_expertise}
-                  defaultValue={selectData.listYourExpertise?.options.find(
-                    (option) => option.label === card.your_expertise
-                  )}
-                />
-              )}
-            />
+            <div className={styles.selectContainer}>
+              <div className={styles.label}>
+                {selectData.listYourExpertise?.placeholder}
+              </div>
 
-            <Controller
-              name="participation_in_the_cic"
-              control={control}
-              render={({ field }) => (
-                <CustomSelect
-                  {...field}
-                  options={selectData.listParticipationInTheCIC?.options || []}
-                  placeholder={
-                    selectData.listParticipationInTheCIC?.placeholder ||
-                    "Выберите..."
-                  }
-                  isSearchable={false}
-                  error={errors.participation_in_the_cic}
-                  defaultValue={selectData.listParticipationInTheCIC?.options.find(
-                    (option) => option.label === card.participation_in_the_cic
-                  )}
-                />
-              )}
-            />
+              <Controller
+                name="your_expertise"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    {...field}
+                    options={selectData.listYourExpertise?.options || []}
+                    placeholder={
+                      selectData.listYourExpertise?.placeholder || "Выберите..."
+                    }
+                    isSearchable={false}
+                    error={errors.your_expertise}
+                    defaultValue={selectData.listYourExpertise?.options.find(
+                      (option) => option.label === card.your_expertise
+                    )}
+                  />
+                )}
+              />
+            </div>
 
-            <Controller
-              name="participant_status"
-              control={control}
-              render={({ field }) => (
-                <CustomSelect
-                  {...field}
-                  options={selectData.listParticipantStatus?.options || []}
-                  placeholder={
-                    selectData.listParticipantStatus?.placeholder ||
-                    "Выберите..."
-                  }
-                  isSearchable={false}
-                  error={errors.participant_status}
-                  defaultValue={selectData.listParticipantStatus?.options.find(
-                    (option) => option.label === card.participant_status
-                  )}
-                />
-              )}
-            />
+            <div className={styles.selectContainer}>
+              <div className={styles.label}>
+                {selectData.listParticipationInTheCIC?.placeholder}
+              </div>
+              <Controller
+                name="participation_in_the_cic"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    {...field}
+                    options={
+                      selectData.listParticipationInTheCIC?.options || []
+                    }
+                    placeholder={
+                      selectData.listParticipationInTheCIC?.placeholder ||
+                      "Выберите..."
+                    }
+                    isSearchable={false}
+                    error={errors.participation_in_the_cic}
+                    defaultValue={selectData.listParticipationInTheCIC?.options.find(
+                      (option) => option.label === card.participation_in_the_cic
+                    )}
+                  />
+                )}
+              />
+            </div>
+
+            <div className={styles.selectContainer}>
+              <div className={styles.label}>
+                {selectData.listParticipantStatus?.placeholder}
+              </div>
+
+              <Controller
+                name="participant_status"
+                control={control}
+                render={({ field }) => (
+                  <CustomSelect
+                    {...field}
+                    options={selectData.listParticipantStatus?.options || []}
+                    placeholder={
+                      selectData.listParticipantStatus?.placeholder ||
+                      "Выберите..."
+                    }
+                    isSearchable={false}
+                    error={errors.participant_status}
+                    defaultValue={selectData.listParticipantStatus?.options.find(
+                      (option) => option.label === card.participant_status
+                    )}
+                  />
+                )}
+              />
+            </div>
           </div>
+
           <div className={styles.photosContainer}>
             <div className={styles.image}>
-              {selectedFile !== null && selectedFile?.path ? (
+              {selectedFile !== "" && selectedFile?.path ? (
                 <ImageIcon big image={URL.createObjectURL(selectedFile)} />
               ) : selectedFile?.includes("/image/photo/") ? (
                 <ImageIcon
                   big
-                  image={`${import.meta.env.VITE_PROXY_TARGET}${selectedFile}`}
+                  image={`https://test.draftnew.site${selectedFile}`}
                 />
               ) : (
-                <ImageIcon big image={userIcon} />
+                <ImageIcon big />
               )}
               <div className={styles.imageButtons}>
                 {selectedFile ? (
@@ -226,7 +260,14 @@ export default function EditForm({
                     >
                       Заменить
                     </DragAndDrop>
-                    <ActionButton onClick={deleteImage}>Удалить</ActionButton>
+                    <ActionButton
+                      onClick={(e) => {
+                        deleteImage(e);
+                        setValue("photo", 0);
+                      }}
+                    >
+                      Удалить
+                    </ActionButton>
                   </>
                 ) : (
                   <DragAndDrop
@@ -248,10 +289,10 @@ export default function EditForm({
               {card.qr_code !== 0 && (
                 <ImageIcon
                   big
-                  image={`${import.meta.env.VITE_PROXY_TARGET}${card.qr_code}`}
+                  image={`https://test.draftnew.site${card.qr_code}`}
                 />
               )}
-              <ActionButton onClick={changeVIP}>
+              <ActionButton onClick={(e) => changeVIP(e)}>
                 {vip === 1 ? "Отменить VIP" : "Присвоить VIP"}
               </ActionButton>
             </div>
@@ -260,7 +301,10 @@ export default function EditForm({
         <div className={styles.buttons}>
           <ApplicationButton type="approve">Сохранить</ApplicationButton>
           <ApplicationButton
-            onClick={() => navigate(`${ROUTER.applications}?type=approved`)}
+            onClick={(e) => {
+              e.preventDefault();
+              navigate(`${ROUTER.applications}?type=approved`);
+            }}
           >
             Отмена
           </ApplicationButton>

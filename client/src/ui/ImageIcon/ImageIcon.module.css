@@ -13,3 +13,15 @@
   object-fit: cover;
   background-color: var(--inputBackgroundColor);
 }
+
+.svgIcon {
+  width: 48px;
+  height: 48px;
+  fill: var(--borderBottomCard);
+}
+
+.svgIcon.big {
+  width: 144px;
+  height: 144px;
+  fill: var(--borderBottomCard);
+}

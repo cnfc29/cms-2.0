@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
         mode === "development"
           ? {
               "/api": {
-                target: env.VITE_PROXY_TARGET,
+                target: env.VITE_PROXY_TARGET || "https://test.draftnew.site",
                 changeOrigin: true,
                 secure: false,
                 rewrite: (path) =>

@@ -1,22 +1,10 @@
-import { useParams } from "react-router-dom";
 import styles from "./UpdateCard.module.css";
-import { useApplication } from "./hook";
 import Title from "../Title/Title";
 import EditForm from "../EditForm/EditForm";
+import { useEditApplication } from "../../HOCs/EditApplicationProvider";
 export default function UpdateCard() {
-  const { id } = useParams();
+  const { loading, error, submit } = useEditApplication();
 
-  const {
-    card,
-    loading,
-    selectData,
-    error,
-    vip,
-    changeVIP,
-    selectedFile,
-    deleteImage,
-    setSelectedFile,
-  } = useApplication(id);
   return (
     <div className={styles.container}>
       {loading ? (
@@ -25,18 +13,12 @@ export default function UpdateCard() {
         <div className={styles.loading}>
           Произошла ошибка. Повторите позднее ...
         </div>
+      ) : submit ? (
+        <div className={styles.loading}>Отправляем данные ...</div>
       ) : (
         <>
-          <Title card={card} vip={vip} />
-          <EditForm
-            card={card}
-            selectData={selectData}
-            changeVIP={changeVIP}
-            vip={vip}
-            selectedFile={selectedFile}
-            deleteImage={deleteImage}
-            setSelectedFile={setSelectedFile}
-          />
+          <Title />
+          <EditForm />
         </>
       )}
     </div>
