@@ -12,7 +12,6 @@ import { useApplications } from "../../HOCs/ApplicationsContext";
 import { AllowedTypesMap } from "../../HOCs/constant";
 import { useNavigate } from "react-router-dom";
 import { ROUTER } from "../../router.config";
-import userIcon from "@images/ui/ImageIcon/images/user-icon.svg";
 
 export default function Card({ card }) {
   const {

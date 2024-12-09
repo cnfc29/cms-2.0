@@ -7,7 +7,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd());
 
   return {
-    base: "./",
+    base: "/",
     plugins: [react()],
     resolve: {
       alias: {
@@ -28,6 +28,9 @@ export default defineConfig(({ mode }) => {
               },
             }
           : undefined,
+    },
+    build: {
+      chunkSizeWarningLimit: 600,
     },
   };
 });
