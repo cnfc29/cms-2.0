@@ -1,14 +1,8 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import debounce from "lodash.debounce";
 import { AllowedTypesMap, allowedTypes } from "./constant";
-import {
-  approve,
-  reject,
-  assignQRCodeFn,
-  setVIPStatus,
-  fetchApplications,
-} from "../API/api";
+import { fetchApplications } from "../API/api";
 import { ROUTER } from "../router.config";
 
 const ApplicationsContext = createContext();
@@ -16,7 +10,6 @@ const ApplicationsContext = createContext();
 export const ApplicationProvider = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
-  const navigate = useNavigate();
   const queryType = searchParams.get("type");
 
   const initialType =
@@ -25,11 +18,11 @@ export const ApplicationProvider = ({ children }) => {
       ? queryType
       : location.pathname === ROUTER.applications
       ? AllowedTypesMap.all
-      : AllowedTypesMap.approved; // TO DO переделать
+      : AllowedTypesMap.approved;
 
   const [selectedType, setSelectedType] = useState(initialType);
-  const [applications, setApplications] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+  const [applications, setApplications] = useState({});
   const [forceUpdate, setForceUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState({});
@@ -43,94 +36,12 @@ export const ApplicationProvider = ({ children }) => {
     setApplications((prev) => ({ ...prev, cards: null }));
   };
 
-  const approveHandler = async (id, updateStateCallback) => {
-    try {
-      const res = await approve(id);
-
-      if (res.status === 200) {
-        updateStateCallback(id);
-      }
-    } catch (error) {
-      console.error("Ошибка при обновлении статуса заявки:", error);
-    }
-  };
-
-  const rejectHandler = async (id, updateStateCallback) => {
-    try {
-      const res = await reject(id);
-
-      if (res.status === 200) {
-        updateStateCallback(id);
-      }
-    } catch (error) {
-      console.error("Ошибка при обновлении статуса заявки:", error);
-    }
-  };
-
-  const setVIP = async (id) => {
-    try {
-      const res = await setVIPStatus(id, 1);
-      if (res.status === 200) {
-        setApplications((prev) => ({
-          ...prev,
-          cards: prev.cards.map((card) =>
-            card.id === id ? { ...card, vip: 1 } : card
-          ),
-        }));
-      }
-    } catch (error) {
-      console.error("Ошибка при обновлении статуса VIP:", error);
-    }
-  };
-
-  const deleteVIP = async (id) => {
-    try {
-      const res = await setVIPStatus(id, 0);
-      if (res.status === 200) {
-        setApplications((prev) => ({
-          ...prev,
-          cards: prev.cards.map((card) =>
-            card.id === id ? { ...card, vip: 0 } : card
-          ),
-        }));
-      }
-    } catch (error) {
-      console.error("Ошибка при обновлении статуса VIP:", error);
-    }
-  };
-
-  const assignQRCode = async (id) => {
-    try {
-      const res = await assignQRCodeFn(id);
-
-      if (res.data.result === true) {
-        setApplications((prev) => ({
-          ...prev,
-          cards: prev.cards.map((card) =>
-            card.id === id ? { ...card, qr_code: res.data.data.src } : card
-          ),
-        }));
-      } else {
-        console.warn("Не удалось получить QR-код из ответа");
-      }
-    } catch (error) {
-      console.error("Ошибка при присвоении QR-кода:", error);
-    }
-  };
-
   useEffect(() => {
     if (location.pathname === ROUTER.applications) {
       setSearchParams({ type: selectedType });
       setSearchQuery("");
     }
   }, [selectedType, queryType, setSearchParams, location.pathname]);
-
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (!user && location.pathname.includes(ROUTER.application)) {
-      navigate("/signin");
-    }
-  }, [location.pathname, navigate]);
 
   useEffect(() => {
     if (
@@ -178,11 +89,6 @@ export const ApplicationProvider = ({ children }) => {
         applications,
         loading,
         setSearchQuery: debouncedSearch,
-        approveHandler,
-        rejectHandler,
-        assignQRCode,
-        setVIP,
-        deleteVIP,
         setFilter,
         setApplications,
       }}

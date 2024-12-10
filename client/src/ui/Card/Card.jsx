@@ -12,17 +12,14 @@ import { useApplications } from "../../HOCs/ApplicationsContext";
 import { AllowedTypesMap } from "../../HOCs/constant";
 import { useNavigate } from "react-router-dom";
 import { ROUTER } from "../../router.config";
+import {
+  approveHandler,
+  assignQRCodeHandler,
+  rejectHandler,
+} from "../../ActionsFn/functions";
 
 export default function Card({ card }) {
-  const {
-    selectedType,
-    approveHandler,
-    rejectHandler,
-    setVIP,
-    deleteVIP,
-    assignQRCode,
-    setApplications,
-  } = useApplications();
+  const { selectedType, setApplications } = useApplications();
 
   const isApproved = selectedType === AllowedTypesMap.approved;
   const isRejected = selectedType === AllowedTypesMap.rejected;
@@ -50,6 +47,17 @@ export default function Card({ card }) {
       document.removeEventListener("mousedown", closeDropdown);
     };
   }, []);
+
+  const handleAssignQRCode = (id) => {
+    assignQRCodeHandler(id, (updatedId, qrCodeSrc) => {
+      setApplications((prev) => ({
+        ...prev,
+        cards: prev.cards.map((card) =>
+          card.id === updatedId ? { ...card, qr_code: qrCodeSrc } : card
+        ),
+      }));
+    });
+  };
 
   const updateApprovedState = (id) => {
     setApplications((prev) => ({
@@ -96,15 +104,6 @@ export default function Card({ card }) {
     setIsDropdownOpen(false);
   };
 
-  const changeVIP = () => {
-    if (card.vip === 0) {
-      setVIP(card.id);
-    } else {
-      deleteVIP(card.id);
-    }
-    setIsDropdownOpen(false);
-  };
-
   return (
     <div className={styles.cardWrapper + " " + styles[selectedType]}>
       <div className={styles.cardContainer + " " + styles[selectedType]}>
@@ -128,12 +127,6 @@ export default function Card({ card }) {
                       : "В одобренные"}
                   </ButtonMenu>
                 )}
-
-                {/* {isApproved && (
-                  <ButtonMenu onClick={changeVIP}>
-                    {card.vip === 0 ? "Присвоить VIP" : "Убрать VIP"}
-                  </ButtonMenu>
-                )} */}
 
                 {isApproved && (
                   <ButtonMenu
@@ -182,7 +175,7 @@ export default function Card({ card }) {
               {(isApproved || isRejected) && <Status status={card.status} />}
 
               {isApproved && card.qr_code === 0 && (
-                <AssignQRCode onClick={() => assignQRCode(card.id)} />
+                <AssignQRCode onClick={() => handleAssignQRCode(card.id)} />
               )}
             </div>
           </div>

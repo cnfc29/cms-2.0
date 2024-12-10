@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -11,17 +11,10 @@ const schema = yup.object().shape({
   password: yup.string().required("Пароль обязателен"),
 });
 
-export default function SignInPage() {
+export default function SignInPage({ setUser }) {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      navigate("/applications");
-    }
-  }, [navigate]);
 
   const {
     register,
@@ -36,6 +29,7 @@ export default function SignInPage() {
       const res = await signIn(data);
       if (res.data.result === true) {
         localStorage.setItem("user", true);
+        setUser(true);
         navigate("/applications");
       } else if (res.data.result === false) {
         setError("Неправильный логин или пароль");
