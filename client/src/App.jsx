@@ -11,6 +11,7 @@ import SignInPage from "./pages/SignInPage/SignInPage";
 import EditApplicationPage from "./pages/EditApplicationPage/EditApplicationPage";
 import ProtectedRoute from "./HOCs/ProtectedRoute";
 import { useEffect, useState } from "react";
+import { SearchTypeProvider } from "./HOCs/SearchTypeProvider";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -43,9 +44,11 @@ function App() {
       path: `${ROUTER.application}/:id`,
       element: (
         <ProtectedRoute isAllowed={!!user}>
-          <ApplicationProvider>
-            <EditApplicationPage />
-          </ApplicationProvider>
+          <SearchTypeProvider>
+            <ApplicationProvider>
+              <EditApplicationPage />
+            </ApplicationProvider>
+          </SearchTypeProvider>
         </ProtectedRoute>
       ),
     },
@@ -53,9 +56,11 @@ function App() {
       path: ROUTER.applications,
       element: (
         <ProtectedRoute isAllowed={!!user}>
-          <ApplicationProvider>
-            <ApplicationsPage />
-          </ApplicationProvider>
+          <SearchTypeProvider>
+            <ApplicationProvider>
+              <ApplicationsPage />
+            </ApplicationProvider>
+          </SearchTypeProvider>
         </ProtectedRoute>
       ),
     },

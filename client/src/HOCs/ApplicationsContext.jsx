@@ -1,27 +1,19 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import debounce from "lodash.debounce";
-import { AllowedTypesMap, allowedTypes } from "./constant";
+import { AllowedTypesMap } from "./constant";
 import { fetchApplications } from "../API/api";
 import { ROUTER } from "../router.config";
+import { useSearchType } from "./SearchTypeProvider";
 
 const ApplicationsContext = createContext();
 
 export const ApplicationProvider = ({ children }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { selectedType, setSearchQuery, searchQuery, setSelectedType } =
+    useSearchType();
+
   const location = useLocation();
-  const queryType = searchParams.get("type");
 
-  const initialType =
-    location.pathname === ROUTER.applications &&
-    allowedTypes.includes(queryType)
-      ? queryType
-      : location.pathname === ROUTER.applications
-      ? AllowedTypesMap.all
-      : AllowedTypesMap.approved;
-
-  const [selectedType, setSelectedType] = useState(initialType);
-  const [searchQuery, setSearchQuery] = useState("");
   const [applications, setApplications] = useState({});
   const [forceUpdate, setForceUpdate] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -35,13 +27,6 @@ export const ApplicationProvider = ({ children }) => {
     setSearchQuery("");
     setApplications((prev) => ({ ...prev, cards: null }));
   };
-
-  useEffect(() => {
-    if (location.pathname === ROUTER.applications) {
-      setSearchParams({ type: selectedType });
-      setSearchQuery("");
-    }
-  }, [selectedType, queryType, setSearchParams, location.pathname]);
 
   useEffect(() => {
     if (
@@ -69,8 +54,6 @@ export const ApplicationProvider = ({ children }) => {
       loadApplications();
     }
   }, [selectedType, searchQuery, forceUpdate, filter, location.pathname]);
-
-  // types, applications, filter - TO DO Providers
 
   return (
     <ApplicationsContext.Provider
